@@ -20,8 +20,8 @@ public class Main {
 		String name;
 		ArrayList<Field> fields;
 
-		public Section(String str) {
-			name = str;
+		public Section(String name) {
+			this.name = name;
 			fields = new ArrayList<Field>();
 		}
 	}
@@ -36,7 +36,7 @@ public class Main {
 		public Field findField(String section, String field) throws Exceptions.NoSuchPairException {
 			for (int i = 0; i < sections.size(); i++) {
 				if (sections.get(i).name.equals(section)) {
-					//System.out.println("yes");
+					// System.out.println("yes");
 					for (int j = 0; j < sections.get(i).fields.size(); j++) {
 						if (sections.get(i).fields.get(j).name.equals(field)) {
 							return sections.get(i).fields.get(j);
@@ -44,10 +44,12 @@ public class Main {
 					}
 				}
 			}
-			throw new Exceptions.NoSuchPairException("No such pair as: Section " + section + ", integer field " + field);
+			throw new Exceptions.NoSuchPairException(
+					"No such pair as: Section " + section + ", integer field " + field);
 		}
 
-		public int findInt(String section, String field) throws Exceptions.NoSuchPairException, Exceptions.MissMatchException {
+		public int findInt(String section, String field)
+				throws Exceptions.NoSuchPairException, Exceptions.MissMatchException {
 			Field f = findField(section, field);
 			if (f.valueType.equals("int")) {
 				return Integer.valueOf(f.value);
@@ -56,7 +58,8 @@ public class Main {
 			}
 		}
 
-		public double findDouble(String section, String field) throws Exceptions.NoSuchPairException, Exceptions.MissMatchException {
+		public double findDouble(String section, String field)
+				throws Exceptions.NoSuchPairException, Exceptions.MissMatchException {
 			Field f = findField(section, field);
 			if (!f.valueType.equals("String")) {
 				return Double.valueOf(f.value);
@@ -76,7 +79,7 @@ public class Main {
 		while (line.charAt(i) != ']') {
 			i++;
 		}
-		//System.out.println(line.substring(1, i));
+		// System.out.println(line.substring(1, i));
 		Section s = new Section(line.substring(1, i));
 		ini.sections.add(s);
 	}
@@ -87,7 +90,7 @@ public class Main {
 			i++;
 		}
 		String n = line.substring(0, i);
-		//System.out.println(n);
+		// System.out.println(n);
 		int doubleFlag = 0;
 		int StringFlag = 0;
 		i++;
@@ -114,7 +117,7 @@ public class Main {
 				type = "int";
 			}
 		}
-		//System.out.println(line.substring(i, j) + " " + type);
+		// System.out.println(line.substring(i, j) + " " + type);
 		Field f = new Field(n, line.substring(i, j), type);
 		ini.sections.get(ini.sections.size() - 1).fields.add(f);
 	}
@@ -139,7 +142,7 @@ public class Main {
 			String st = "";
 			while (sc.hasNextLine() && st != null) {
 				st = sc.nextLine();
-				//System.out.println(st);
+				// System.out.println(st);
 				if (st.length() == 0) {
 					continue;
 				}
