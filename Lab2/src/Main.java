@@ -18,6 +18,10 @@ public class Main {
 				throw new Exceptions.NotUniqueCode();
 			}
 		}
+		protected Product(Product product){
+			this.code=product.code;
+			this.name=product.name;
+		}
 	}
 
 	public static class AllProducts {
@@ -41,13 +45,14 @@ public class Main {
 		}
 	}
 
-	public static class ProductInShop {
-		Product product;
+	public static class ProductInShop extends Product{
+		//Product product;
 		int price;
 		int number;
 
 		public ProductInShop(Product product, int price, int number) {
-			this.product = product;
+			super(product);
+			//this.product = product;
 			this.price = price;
 			this.number = number;
 		}
@@ -73,7 +78,7 @@ public class Main {
 
 		public void consignment(Product product, int number, int price) {
 			for (int i = 0; i < catalogue.size(); i++) {
-				if (catalogue.get(i).product.equals(product)) {
+				if (catalogue.get(i).code==product.code) {
 					catalogue.get(i).number += number;
 					catalogue.get(i).price = price;
 					return;
@@ -96,16 +101,16 @@ public class Main {
 			} else {
 				System.out.println("You can buy:");
 				for (int i = 0; i < purchase.size() - 1; i++) {
-					System.out.println(purchase.get(i).number + " " + purchase.get(i).product.name + " or");
+					System.out.println(purchase.get(i).number + " " + purchase.get(i).name + " or");
 				}
 				System.out.println(purchase.get(purchase.size() - 1).number + " "
-						+ purchase.get(purchase.size() - 1).product.name + ".");
+						+ purchase.get(purchase.size() - 1).name + ".");
 			}
 		}
 
 		public int purchase(Product product, int number) {
 			for (int i = 0; i < catalogue.size(); i++) {
-				if (catalogue.get(i).product.equals(product)) {
+				if (catalogue.get(i).code == product.code) {
 					if (catalogue.get(i).number >= number) {
 						return number * catalogue.get(i).price;
 					} else {
@@ -145,7 +150,7 @@ public class Main {
 			Shop resultShop = null;
 			for (int i = 0; i < shops.size(); i++) {
 				for (int j = 0; j < shops.get(i).catalogue.size(); j++) {
-					if ((shops.get(i).catalogue.get(j).product.equals(product))
+					if ((shops.get(i).catalogue.get(j).code == product.code)
 							&& (shops.get(i).catalogue.get(j).price < minPrice)) {
 						minPrice = shops.get(i).catalogue.get(j).price;
 						resultShop = shops.get(i);
@@ -169,7 +174,7 @@ public class Main {
 					if (enoughProduct && productExists) {
 						productExists = false;
 						for (int j = 0; j < shops.get(i).catalogue.size(); j++) {
-							if (shops.get(i).catalogue.get(j).product.equals(purchase[k].product)) {
+							if (shops.get(i).catalogue.get(j).code == purchase[k].code) {
 								if (shops.get(i).catalogue.get(j).number >= purchase[k].number) {
 									purchasePrice += purchase[k].number * shops.get(i).catalogue.get(j).price;
 									productExists = true;
@@ -243,8 +248,8 @@ public class Main {
 		ProductInShop[] purchase = new ProductInShop[2];
 		purchase[0] = new ProductInShop(sword, 0, 1);
 		purchase[1] = new ProductInShop(shield, 0, 1);
-		System.out.println("You can buy the cheapest " + purchase[0].number + " " + purchase[0].product.name + " and "
-				+ purchase[1].number + " " + purchase[1].product.name + " in the "
+		System.out.println("You can buy the cheapest " + purchase[0].number + " " + purchase[0].name + " and "
+				+ purchase[1].number + " " + purchase[1].name + " in the "
 				+ market.findCheapestConsingment(purchase).name);
 		purchase[1] = new ProductInShop(cabbage, 0, 10);
 		market.findCheapestConsingment(purchase);
