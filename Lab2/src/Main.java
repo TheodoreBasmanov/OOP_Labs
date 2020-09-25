@@ -18,9 +18,10 @@ public class Main {
 				throw new Exceptions.NotUniqueCode();
 			}
 		}
-		protected Product(Product product){
-			this.code=product.code;
-			this.name=product.name;
+
+		protected Product(Product product) {
+			this.code = product.code;
+			this.name = product.name;
 		}
 	}
 
@@ -45,16 +46,17 @@ public class Main {
 		}
 	}
 
-	public static class ProductInShop extends Product{
-		//Product product;
+	public static class ProductInShop extends Product {
 		int price;
 		int number;
 
 		public ProductInShop(Product product, int price, int number) {
 			super(product);
-			//this.product = product;
 			this.price = price;
 			this.number = number;
+		}
+		public ProductInShop(Product product, int number){
+			this(product, 0, number);
 		}
 	}
 
@@ -78,13 +80,23 @@ public class Main {
 
 		public void consignment(Product product, int number, int price) {
 			for (int i = 0; i < catalogue.size(); i++) {
-				if (catalogue.get(i).code==product.code) {
+				if (catalogue.get(i).code == product.code) {
 					catalogue.get(i).number += number;
 					catalogue.get(i).price = price;
 					return;
 				}
 			}
 			ProductInShop newProduct = new ProductInShop(product, price, number);
+			catalogue.add(newProduct);
+		}
+		public void consignment(Product product, int number) {
+			for (int i = 0; i < catalogue.size(); i++) {
+				if (catalogue.get(i).code == product.code) {
+					catalogue.get(i).number += number;
+					return;
+				}
+			}
+			ProductInShop newProduct = new ProductInShop(product, number);
 			catalogue.add(newProduct);
 		}
 
@@ -103,8 +115,8 @@ public class Main {
 				for (int i = 0; i < purchase.size() - 1; i++) {
 					System.out.println(purchase.get(i).number + " " + purchase.get(i).name + " or");
 				}
-				System.out.println(purchase.get(purchase.size() - 1).number + " "
-						+ purchase.get(purchase.size() - 1).name + ".");
+				System.out.println(
+						purchase.get(purchase.size() - 1).number + " " + purchase.get(purchase.size() - 1).name + ".");
 			}
 		}
 
@@ -246,12 +258,12 @@ public class Main {
 		System.out.println("Buying 3 " + poison.name + " in the" + alchemyShop.name + " will cost "
 				+ alchemyShop.purchase(poison, 3) + " septims.");
 		ProductInShop[] purchase = new ProductInShop[2];
-		purchase[0] = new ProductInShop(sword, 0, 1);
-		purchase[1] = new ProductInShop(shield, 0, 1);
-		System.out.println("You can buy the cheapest " + purchase[0].number + " " + purchase[0].name + " and "
-				+ purchase[1].number + " " + purchase[1].name + " in the "
-				+ market.findCheapestConsingment(purchase).name);
-		purchase[1] = new ProductInShop(cabbage, 0, 10);
+		purchase[0] = new ProductInShop(sword, 1);
+		purchase[1] = new ProductInShop(shield, 1);
+		System.out.println(
+				"You can buy the cheapest " + purchase[0].number + " " + purchase[0].name + " and " + purchase[1].number
+						+ " " + purchase[1].name + " in the " + market.findCheapestConsingment(purchase).name);
+		purchase[1] = new ProductInShop(cabbage, 10);
 		market.findCheapestConsingment(purchase);
 	}
 }
