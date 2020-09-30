@@ -14,7 +14,7 @@ import java.util.ArrayList;
 			this.name = name;
 			this.address = address;
 			catalogue = new ArrayList<Products.ProductInShop>();
-			Main.market.add(this);
+			Market.market.add(this);
 		}
 
 		public Products.ProductInShop findProduct(int code) {

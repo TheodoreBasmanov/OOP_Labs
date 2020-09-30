@@ -19,14 +19,14 @@ public class MarketTest {
 
 	@Test
 	public void testAdd() {
-		Main.market.shops.clear();
+		Market.market.shops.clear();
 		Shop vegetableShop = new Shop("vegetalbe shop", "Market Square 1");
 		Shop armorShop = new Shop("armor shop", "Market Square 2");
 		Shop alchemyShop = new Shop("alchemy shop", "Market Square 3");
 		Shop generalShop = new Shop("general shop", "Market Alley 2");
-		Shop expected1 = Main.market.shops.get(0);
+		Shop expected1 = Market.market.shops.get(0);
 		Shop actual1 = vegetableShop;
-		Shop expected2 = Main.market.shops.get(Main.market.shops.size()-1);
+		Shop expected2 = Market.market.shops.get(Market.market.shops.size()-1);
 		Shop actual2 = generalShop;
 		Assert.assertEquals(expected1, actual1);
 		Assert.assertEquals(expected2, actual2);
@@ -34,7 +34,7 @@ public class MarketTest {
 
 	@Test
 	public void testWhatCanYouBuy() {
-		Main.market.shops.clear();
+		Market.market.shops.clear();
 		Products.Product carrot = new Products.Product("carrot");
 		Products.Product potato = new Products.Product("potato");
 		Products.Product cabbage = new Products.Product("cabbage");
@@ -60,7 +60,7 @@ public class MarketTest {
 		alchemyShop.consignment(magickaPotion, 7, 20);
 		alchemyShop.consignment(staminaPotion, 9, 20);
 		alchemyShop.consignment(poison, 5, 58);
-		ArrayList<Products.ProductInShop> expected = Main.market.whatCanYouBuy(100);
+		ArrayList<Products.ProductInShop> expected = Market.market.whatCanYouBuy(100);
 		ArrayList<Products.ProductInShop> actual = new ArrayList<Products.ProductInShop>();
 		actual.add(new Products.ProductInShop(carrot, 1, 100));
 		actual.add(new Products.ProductInShop(potato, 1, 100));
@@ -78,7 +78,7 @@ public class MarketTest {
 
 	@Test
 	public void testFindCheapestProduct() {
-		Main.market.shops.clear();
+		Market.market.shops.clear();
 		Products.Product carrot = new Products.Product("carrot");
 		Products.Product potato = new Products.Product("potato");
 		Products.Product cabbage = new Products.Product("cabbage");
@@ -88,7 +88,7 @@ public class MarketTest {
 		vegetableShop.consignment(potato, 15, 1);
 		vegetableShop.consignment(cabbage, 5, 2);
 		generalShop.consignment(potato, 10, 3);
-		Shop expected = Main.market.findCheapestProduct(potato);
+		Shop expected = Market.market.findCheapestProduct(potato);
 		Shop actual = vegetableShop;
 		Assert.assertEquals(expected, actual);
 		//fail("Not yet implemented");
@@ -96,7 +96,7 @@ public class MarketTest {
 
 	@Test
 	public void testFindCheapestConsingment() {
-		Main.market.shops.clear();
+		Market.market.shops.clear();
 		Products.Product sword = new Products.Product("sword");
 		Products.Product breastplate = new Products.Product("breastplate");
 		Products.Product shield = new Products.Product("shield");
@@ -112,7 +112,7 @@ public class MarketTest {
 		Products.ProductInShop[] purchase = new Products.ProductInShop[2];
 		purchase[0] = new Products.ProductInShop(sword, 1);
 		purchase[1] = new Products.ProductInShop(shield, 1);
-		Shop expected = Main.market.findCheapestConsingment(purchase);
+		Shop expected = Market.market.findCheapestConsingment(purchase);
 		Shop actual = armorShop;
 		Assert.assertEquals(expected, actual);
 		//fail("Not yet implemented");

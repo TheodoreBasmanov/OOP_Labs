@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-	public static Market market = new Market();
+	
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
@@ -39,11 +39,11 @@ public class Main {
 		generalShop.consignment(shield, 3, 65);
 		generalShop.consignment(healthPotion, 6, 20);
 		System.out.println(
-				"You can buy the cheapest " + shield.name + " in the " + market.findCheapestProduct(shield).name);
+				"You can buy the cheapest " + shield.name + " in the " + Market.market.findCheapestProduct(shield).name);
 		System.out.println("For 100 septims you can buy");
 		// System.out.println(alchemyShop.catalogue.get(3).number);
 
-		ArrayList<Products.ProductInShop> purchase1 = market.whatCanYouBuy(100);
+		ArrayList<Products.ProductInShop> purchase1 = Market.market.whatCanYouBuy(100);
 		for (int i = 0; i < purchase1.size(); i++) {
 			System.out.println(purchase1.get(i).name + " " + purchase1.get(i).number);
 		}
@@ -56,8 +56,8 @@ public class Main {
 		purchase[1] = new Products.ProductInShop(shield, 1);
 		System.out.println(
 				"You can buy the cheapest " + purchase[0].number + " " + purchase[0].name + " and " + purchase[1].number
-						+ " " + purchase[1].name + " in the " + market.findCheapestConsingment(purchase).name);
+						+ " " + purchase[1].name + " in the " + Market.market.findCheapestConsingment(purchase).name);
 		purchase[1] = new Products.ProductInShop(cabbage, 10);
-		market.findCheapestConsingment(purchase);
+		Market.market.findCheapestConsingment(purchase);
 	}
 }
