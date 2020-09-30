@@ -19,6 +19,7 @@ public class ShopTest {
 
 	@Test
 	public void testFindProduct() {
+		Products.Product.NextCode = 1;
 		Products.Product carrot = new Products.Product("carrot");
 		Products.Product potato = new Products.Product("potato");
 		Products.Product cabbage = new Products.Product("cabbage");
@@ -26,13 +27,14 @@ public class ShopTest {
 		vegetableShop.consignment(carrot, 10, 1);
 		vegetableShop.consignment(potato, 15, 1);
 		vegetableShop.consignment(cabbage, 5, 2);
-		Products.ProductInShop expected = vegetableShop.findProduct(13);
+		Products.ProductInShop expected = vegetableShop.findProduct(2);
 		Products.ProductInShop actual = new Products.ProductInShop(potato, 1, 15);
 		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void testConsignmentProductIntInt() {
+		Products.Product.NextCode = 1;
 		Products.Product iron = new Products.Product("iron ingot");
 		Products.Product steel = new Products.Product("steel ingot");
 		Products.Product silver = new Products.Product("silver ingot");
@@ -40,20 +42,21 @@ public class ShopTest {
 		materialShop.consignment(iron, 20, 7);
 		materialShop.consignment(steel, 15, 20);
 		materialShop.consignment(silver, 5, 50);
-		Products.ProductInShop expected1 = materialShop.findProduct(9);
+		Products.ProductInShop expected1 = materialShop.findProduct(1);
 		Products.ProductInShop actual1 = new Products.ProductInShop(iron, 7, 20);
-		Products.ProductInShop expected2 = materialShop.findProduct(10);
+		Products.ProductInShop expected2 = materialShop.findProduct(2);
 		Products.ProductInShop actual2 = new Products.ProductInShop(steel, 20, 15);
-		Products.ProductInShop expected3 = materialShop.findProduct(11);
+		Products.ProductInShop expected3 = materialShop.findProduct(3);
 		Products.ProductInShop actual3 = new Products.ProductInShop(silver, 50, 5);
 		Assert.assertEquals(expected1, actual1);
 		Assert.assertEquals(expected2, actual2);
 		Assert.assertEquals(expected3, actual3);
-		//fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 
 	@Test
 	public void testConsignmentProductInt() {
+		Products.Product.NextCode = 1;
 		Products.Product iron = new Products.Product("iron ingot");
 		Products.Product steel = new Products.Product("steel ingot");
 		Products.Product silver = new Products.Product("silver ingot");
@@ -62,14 +65,15 @@ public class ShopTest {
 		materialShop.consignment(steel, 15, 20);
 		materialShop.consignment(silver, 5, 50);
 		materialShop.consignment(iron, 20);
-		Products.ProductInShop expected = materialShop.findProduct(19);
+		Products.ProductInShop expected = materialShop.findProduct(1);
 		Products.ProductInShop actual = new Products.ProductInShop(iron, 7, 40);
 		Assert.assertEquals(expected, actual);
-		//fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 
 	@Test
 	public void testWhatCanYouBuy() {
+		Products.Product.NextCode = 1;
 		Products.Product sword = new Products.Product("sword");
 		Products.Product breastplate = new Products.Product("breastplate");
 		Products.Product shield = new Products.Product("shield");
@@ -89,6 +93,7 @@ public class ShopTest {
 
 	@Test
 	public void testPurchase() {
+		Products.Product.NextCode = 1;
 		Products.Product healthPotion = new Products.Product("health potion");
 		Products.Product magickaPotion = new Products.Product("magicka potion");
 		Products.Product staminaPotion = new Products.Product("stamina potion");
@@ -100,7 +105,7 @@ public class ShopTest {
 		alchemyShop.consignment(poison, 5, 58);
 		int expected = alchemyShop.purchase(poison, 3);
 		int actual = 174;
-		Products.ProductInShop expectedProd = alchemyShop.findProduct(8);
+		Products.ProductInShop expectedProd = alchemyShop.findProduct(4);
 		Products.ProductInShop actualProd = new Products.ProductInShop(poison, 58, 2);
 		Assert.assertEquals(expected, actual);
 		Assert.assertEquals(expectedProd, actualProd);
@@ -108,6 +113,7 @@ public class ShopTest {
 
 	@Test
 	public void testFindConsignment() {
+		Products.Product.NextCode = 1;
 		Products.Product sword = new Products.Product("sword");
 		Products.Product breastplate = new Products.Product("breastplate");
 		Products.Product shield = new Products.Product("shield");
