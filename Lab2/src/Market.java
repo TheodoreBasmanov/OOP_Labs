@@ -6,16 +6,6 @@ public class Market {
 		public Market() {
 			shops = new ArrayList<Shop>();
 		}
-
-		public boolean checkShop(int code) {
-			for (int i = 0; i < shops.size(); i++) {
-				if (shops.get(i).code == code) {
-					return false;
-				}
-			}
-			return true;
-		}
-
 		public void add(Shop shop) {
 			shops.add(shop);
 		}
