@@ -43,5 +43,15 @@ public class Products {
 			this.number = ProductInShop.number;
 			this.price = ProductInShop.price;
 		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (getClass() != o.getClass()) {
+				return false;
+			}
+			ProductInShop product = (ProductInShop) o;
+			return this.code == product.code && this.name.equals(product.name) && this.number == product.number
+					&& this.price == product.price;
+		}
 	}
 }

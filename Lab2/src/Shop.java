@@ -71,7 +71,6 @@ import java.util.ArrayList;
 		public int purchase(Products.Product product, int number) throws Exceptions.NotEnoughProduct, Exceptions.NoSuchProduct {
 			for (int i = 0; i < catalogue.size(); i++) {
 				if (catalogue.get(i).code == product.code) {
-					System.out.println(catalogue.get(i).number);
 					if (catalogue.get(i).number >= number) {
 						int price = catalogue.get(i).price;
 
