@@ -73,7 +73,6 @@ public class MarketTest {
 		actual.add(new Products.ProductInShop(staminaPotion, 20, 5));
 		actual.add(new Products.ProductInShop(poison, 58, 1));
 		Assert.assertEquals(expected, actual);
-		//fail("Not yet implemented");
 	}
 
 	@Test
@@ -91,7 +90,6 @@ public class MarketTest {
 		Shop expected = Market.market.findCheapestProduct(potato);
 		Shop actual = vegetableShop;
 		Assert.assertEquals(expected, actual);
-		//fail("Not yet implemented");
 	}
 
 	@Test
@@ -115,7 +113,6 @@ public class MarketTest {
 		Shop expected = Market.market.findCheapestConsingment(purchase);
 		Shop actual = armorShop;
 		Assert.assertEquals(expected, actual);
-		//fail("Not yet implemented");
 	}
 
 }

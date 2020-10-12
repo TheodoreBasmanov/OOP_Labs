@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 
 	public class Shop {
-		static int NextCode = 1;
+		private static int NextCode = 1;
 		int code;
 		String name;
 		String address;

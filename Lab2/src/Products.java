@@ -1,7 +1,7 @@
 
 public class Products {
 	public static class Product {
-		static int NextCode = 1;
+		private static int NextCode = 1;
 		int code;
 		String name;
 
