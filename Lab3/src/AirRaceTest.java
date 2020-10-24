@@ -21,8 +21,9 @@ public class AirRaceTest {
 		race.addVehicle(new MagicCarpet());
 		race.addVehicle(new Mortar());
 		race.addVehicle(new Broom());
+		race.addVehicle(new DeltaFlyer());
 		String expected = race.getWinner().getClass().getName();
-		String actual = "Broom";
+		String actual = "DeltaFlyer";
 		Assert.assertEquals(expected, actual);
 	}
 	@Test(expected = Exceptions.CantAddLandVehicle.class)
