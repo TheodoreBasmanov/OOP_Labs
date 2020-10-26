@@ -17,7 +17,7 @@ public class RaceTest {
 
 	@Test
 	public void getWinnerTest() {
-		Race race = new Race(1000);
+		Race<Moving> race = new Race<Moving>(1000);
 		race.addVehicle(new Dromedary());
 		race.addVehicle(new Centaur());
 		race.addVehicle(new Mortar());

@@ -1,4 +1,5 @@
 
+
 public class Bactrian extends LandTransport {
 
 	private Bactrian(double speed, double restInterval, double restDuration) {

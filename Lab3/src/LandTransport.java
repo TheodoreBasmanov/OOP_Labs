@@ -1,4 +1,5 @@
 
+
 public class LandTransport implements Moving {
 	double Speed;
 	double RestInterval;

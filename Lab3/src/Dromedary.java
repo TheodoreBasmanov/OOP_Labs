@@ -1,4 +1,3 @@
-
 public class Dromedary extends LandTransport {
 	private Dromedary(double speed, double restInterval, double restDuration) {
 		super(speed, restInterval, restDuration);

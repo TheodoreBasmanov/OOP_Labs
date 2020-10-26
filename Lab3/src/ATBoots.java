@@ -1,4 +1,3 @@
-
 public class ATBoots extends LandTransport {
 	private ATBoots(double speed, double restInterval, double restDuration) {
 		super(speed, restInterval, restDuration);
