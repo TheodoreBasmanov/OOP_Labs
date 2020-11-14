@@ -65,5 +65,31 @@ public class Exceptions {
 			this("No delta points have been created before.");
 		}
 	}
+	public static class NegativeNumberRestriction extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public NegativeNumberRestriction(String errorMessage) {
+			super(errorMessage);
+		}
+		public NegativeNumberRestriction(){
+			this("You can't make a number restriction negative.");
+		}
+	}
+	public static class NegativeSizeRestriction extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public NegativeSizeRestriction(String errorMessage) {
+			super(errorMessage);
+		}
+		public NegativeSizeRestriction(){
+			this("You can't make a size restriction negative.");
+		}
+	}
 
 }
