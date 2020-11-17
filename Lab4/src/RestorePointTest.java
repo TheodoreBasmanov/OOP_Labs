@@ -1,6 +1,9 @@
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -20,13 +23,29 @@ public class RestorePointTest {
 
 	@Test
 	public void sizeTest() throws IOException {
-		ArrayList<String> files = new ArrayList<String>();
-		files.add("test1.txt");
-		files.add("test2.txt");
-		files.add("test3.txt");
+		ArrayList<FileForBackup> files = new ArrayList<FileForBackup>();
+		files.add(new FileForBackup("test1.txt"));
+		files.add(new FileForBackup("test2.txt"));
+		files.add(new FileForBackup("test3.txt"));
 		RestorePoint restorePoint = new RestorePoint(1, files, false);
 		long expected = restorePoint.BackupSize;
-		long actual = 15;
+		long actual = files.get(0).file.length()+files.get(1).file.length()+files.get(2).file.length();
+		Assert.assertEquals(expected == actual, true);
+	}
+
+	@Test
+	public void sizeDeltaTest() throws IOException {
+		ArrayList<FileForBackup> files = new ArrayList<FileForBackup>();
+		files.add(new FileForBackup("test5.txt"));
+		files.add(new FileForBackup("test2.txt"));
+		files.add(new FileForBackup("test3.txt"));
+		FileWriter pw = new FileWriter("test5.txt", true);
+		pw.write("diff");
+		pw.close();
+		files.get(0).modified = true;
+		RestorePoint restorePoint = new RestorePoint(1, files, true);
+		long expected = restorePoint.BackupSize;
+		long actual = 14;
 		Assert.assertEquals(expected == actual, true);
 	}
 

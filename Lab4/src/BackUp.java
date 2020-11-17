@@ -9,8 +9,8 @@ public class BackUp {
 	private static int ID = 0;
 	long lastBackUpSize;
 	long backUpsSize;
-	ArrayList<String> files;
-	ArrayList<String> deltaFiles;
+	ArrayList<FileForBackup> files;
+	ArrayList<FileForBackup> deltaFiles;
 	ArrayList<RestorePoint> restorePoints;
 	int lastRestorePoint = 0;
 	int lastDeltaPoint = 0;
@@ -25,8 +25,8 @@ public class BackUp {
 
 	BackUp() {
 		lastBackUpSize = 0;
-		files = new ArrayList<String>();
-		deltaFiles = new ArrayList<String>();
+		files = new ArrayList<FileForBackup>();
+		deltaFiles = new ArrayList<FileForBackup>();
 		restorePoints = new ArrayList<RestorePoint>();
 	}
 
@@ -35,41 +35,65 @@ public class BackUp {
 		if (!file.exists()) {
 			throw new Exceptions.TheFileDoesntExist();
 		}
-		files.add(filePath);
-		deltaFiles.add(filePath);
+		files.add(new FileForBackup(filePath));
+		deltaFiles.add(new FileForBackup(filePath));
 	}
 
 	void removeFile(String filePath) throws Exceptions.TheFileHasntBeenAdded {
-		if (files.indexOf(filePath) == -1) {
+		boolean noFileFlag = true;
+		for (int i = 0; i < files.size(); i++) {
+			if (files.get(i).name.equals(filePath)) {
+				files.remove(i);
+				noFileFlag = false;
+			}
+		}
+		if (noFileFlag) {
 			throw new Exceptions.TheFileHasntBeenAdded();
-		} else {
-			files.remove(filePath);
+		}
+	}
+
+	void checkForDeltaFiles() {
+		for (int i = 0; i < files.size(); i++) {
+			if (files.get(i).lastModified == files.get(i).file.lastModified()) {
+				deltaFiles.add(files.get(i));
+				deltaFiles.get(deltaFiles.size() - 1).modified = true;
+			}
+		}
+	}
+
+	void refreshFiles() {
+		for (int i = 0; i < files.size(); i++) {
+			files.get(i).lastModified = files.get(i).file.lastModified();
+			files.get(i).size = files.get(i).getSize();
 		}
 	}
 
 	void createRestorePoint() throws IOException {
+		deltaFiles.clear();
+		refreshFiles();
 		RestorePoint restorePoint = new RestorePoint(ID, files, false);
 		ID++;
 		lastBackUpSize = restorePoint.BackupSize;
 		backUpsSize += restorePoint.BackupSize;
 		restorePoints.add(restorePoint);
-		lastRestorePoint = restorePoints.size()-1;
+		lastRestorePoint = restorePoints.size() - 1;
 		removePointsRestriction();
 	}
 
 	void createDeltaPoint() throws IOException, Exceptions.CantAddDeltaPoint {
-		
 		if (restorePoints.isEmpty()) {
 			throw new Exceptions.CantAddDeltaPoint();
 		}
+		checkForDeltaFiles();
 		RestorePoint tmpRestorePoint = new RestorePoint(ID, files, false);
 		long deltaSize = tmpRestorePoint.BackupSize - restorePoints.get(lastRestorePoint).BackupSize;
 		lastBackUpSize = tmpRestorePoint.BackupSize;
 		backUpsSize += deltaSize;
 		RestorePoint deltaRestorePoint = new RestorePoint(ID, deltaFiles, true);
 		restorePoints.add(deltaRestorePoint);
-		lastDeltaPoint = restorePoints.size()-1;
+		lastDeltaPoint = restorePoints.size() - 1;
 		ID++;
+		refreshFiles();
 	}
 
 	void setNumberRestriction(int N) throws Exceptions.NegativeNumberRestriction {
@@ -116,10 +140,10 @@ public class BackUp {
 	}
 
 	int pointsToRemoveNumberRestriction() {
-	
+
 		if (restorePoints.size() > RestrictionN) {
 			if (restorePoints.size() >= 2) {
-				
+
 				int numberOfDeltaPoints = 0;
 				int i = 1;
 				while ((i < restorePoints.size()) && (restorePoints.get(i).isDelta)) {
@@ -145,7 +169,7 @@ public class BackUp {
 		if (backUpsSize > RestrictionSize) {
 			long sizeToBeRemoved = 0;
 			int pointsToBeRemoved = 0;
-			while (backUpsSize - RestrictionSize > sizeToBeRemoved) {
+			while ((pointsToBeRemoved < restorePoints.size()) && (backUpsSize - RestrictionSize > sizeToBeRemoved)) {
 				sizeToBeRemoved += restorePoints.get(pointsToBeRemoved).BackupSize;
 				pointsToBeRemoved++;
 			}
@@ -166,7 +190,8 @@ public class BackUp {
 
 	int pointsToRemoveTimeRestriction() {
 		int pointsToBeRemoved = 0;
-		while (restorePoints.get(pointsToBeRemoved).CreationTime.isBefore(RestrictionTime)) {
+		while ((pointsToBeRemoved < restorePoints.size())
+				&& (restorePoints.get(pointsToBeRemoved).CreationTime.isBefore(RestrictionTime))) {
 			pointsToBeRemoved++;
 		}
 		int numberOfDeltaPoints = 0;

@@ -7,47 +7,40 @@ public class RestorePoint {
 	int Id;
 	LocalDateTime CreationTime;
 	long BackupSize;
-	ArrayList<String> files;
+	ArrayList<FileForBackup> files;
 	boolean isDelta;
 
-	RestorePoint(int Id, ArrayList<String> files, boolean isDelta) throws IOException {
+	RestorePoint(int Id, ArrayList<FileForBackup> files, boolean isDelta) throws IOException {
 		this.Id = Id;
 		this.CreationTime = LocalDateTime.now();
-		this.files = new ArrayList<String>();
+		this.files = new ArrayList<FileForBackup>();
 		this.files.addAll(files);
-		BackupSize = this.getSize();
+		if (isDelta) {
+			BackupSize = this.getDeltaSize();
+		} else {
+			BackupSize = this.getSize();
+		}
 		this.isDelta = isDelta;
 	}
 
-	private long getSize() throws IOException, Exceptions.TheFileDoesntExist {
+	private long getSize() {
 		long Size = 0;
-		File file;
-		long fileSize = 0;
 		for (int i = 0; i < files.size(); i++) {
-			file = new File(files.get(i));
-			if (!file.exists()) {
-				throw new Exceptions.TheFileDoesntExist();
-			} else {
-				if (file.isDirectory()) {
-					fileSize = getFolderSize(file);
-				} else {
-					fileSize = file.length();
-				}
-			}
-			Size += fileSize;
+			Size += files.get(i).size;
 		}
 		return Size;
 	}
 
-	public static long getFolderSize(File dir) {
-		long size = 0;
-		for (File file : dir.listFiles()) {
-			if (file.isFile()) {
-				System.out.println(file.getName() + " " + file.length());
-				size += file.length();
-			} else
-				size += getFolderSize(file);
+	private long getDeltaSize() {
+		long Size = 0;
+		for (int i = 0; i < files.size(); i++) {
+			if(!files.get(i).modified){
+			Size += files.get(i).sizeDifference;
+			}else{
+				Size+=files.get(i).getSize()-files.get(i).size;
+			}
 		}
-		return size;
+		return Size;
 	}
+
 }
