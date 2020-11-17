@@ -13,6 +13,7 @@ public class RestorePoint {
 	RestorePoint(int Id, ArrayList<FileForBackup> files, boolean isDelta) throws IOException {
 		this.Id = Id;
 		this.CreationTime = LocalDateTime.now();
+<<<<<<< HEAD
 		this.files = new ArrayList<FileForBackup>();
 		this.files.addAll(files);
 		if (isDelta) {
@@ -20,6 +21,11 @@ public class RestorePoint {
 		} else {
 			BackupSize = this.getSize();
 		}
+=======
+		this.files = new ArrayList<String>();
+		this.files.addAll(files);
+		BackupSize = this.getSize();
+>>>>>>> main
 		this.isDelta = isDelta;
 	}
 

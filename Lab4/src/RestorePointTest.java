@@ -1,9 +1,13 @@
 import static org.junit.Assert.*;
 
+<<<<<<< HEAD
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+=======
+import java.io.IOException;
+>>>>>>> main
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -23,6 +27,7 @@ public class RestorePointTest {
 
 	@Test
 	public void sizeTest() throws IOException {
+<<<<<<< HEAD
 		ArrayList<FileForBackup> files = new ArrayList<FileForBackup>();
 		files.add(new FileForBackup("test1.txt"));
 		files.add(new FileForBackup("test2.txt"));
@@ -46,6 +51,15 @@ public class RestorePointTest {
 		RestorePoint restorePoint = new RestorePoint(1, files, true);
 		long expected = restorePoint.BackupSize;
 		long actual = 14;
+=======
+		ArrayList<String> files = new ArrayList<String>();
+		files.add("test1.txt");
+		files.add("test2.txt");
+		files.add("test3.txt");
+		RestorePoint restorePoint = new RestorePoint(1, files, false);
+		long expected = restorePoint.BackupSize;
+		long actual = 15;
+>>>>>>> main
 		Assert.assertEquals(expected == actual, true);
 	}
 

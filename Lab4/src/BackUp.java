@@ -25,8 +25,13 @@ public class BackUp {
 
 	BackUp() {
 		lastBackUpSize = 0;
+<<<<<<< HEAD
 		files = new ArrayList<FileForBackup>();
 		deltaFiles = new ArrayList<FileForBackup>();
+=======
+		files = new ArrayList<String>();
+		deltaFiles = new ArrayList<String>();
+>>>>>>> main
 		restorePoints = new ArrayList<RestorePoint>();
 	}
 
@@ -76,11 +81,16 @@ public class BackUp {
 		lastBackUpSize = restorePoint.BackupSize;
 		backUpsSize += restorePoint.BackupSize;
 		restorePoints.add(restorePoint);
+<<<<<<< HEAD
 		lastRestorePoint = restorePoints.size() - 1;
+=======
+		lastRestorePoint = restorePoints.size()-1;
+>>>>>>> main
 		removePointsRestriction();
 	}
 
 	void createDeltaPoint() throws IOException, Exceptions.CantAddDeltaPoint {
+		
 		if (restorePoints.isEmpty()) {
 			throw new Exceptions.CantAddDeltaPoint();
 		}
@@ -91,7 +101,11 @@ public class BackUp {
 		backUpsSize += deltaSize;
 		RestorePoint deltaRestorePoint = new RestorePoint(ID, deltaFiles, true);
 		restorePoints.add(deltaRestorePoint);
+<<<<<<< HEAD
 		lastDeltaPoint = restorePoints.size() - 1;
+=======
+		lastDeltaPoint = restorePoints.size()-1;
+>>>>>>> main
 		ID++;
 		refreshFiles();
 	}
@@ -140,10 +154,17 @@ public class BackUp {
 	}
 
 	int pointsToRemoveNumberRestriction() {
+<<<<<<< HEAD
 
 		if (restorePoints.size() > RestrictionN) {
 			if (restorePoints.size() >= 2) {
 
+=======
+	
+		if (restorePoints.size() > RestrictionN) {
+			if (restorePoints.size() >= 2) {
+				
+>>>>>>> main
 				int numberOfDeltaPoints = 0;
 				int i = 1;
 				while ((i < restorePoints.size()) && (restorePoints.get(i).isDelta)) {
@@ -169,7 +190,11 @@ public class BackUp {
 		if (backUpsSize > RestrictionSize) {
 			long sizeToBeRemoved = 0;
 			int pointsToBeRemoved = 0;
+<<<<<<< HEAD
 			while ((pointsToBeRemoved < restorePoints.size()) && (backUpsSize - RestrictionSize > sizeToBeRemoved)) {
+=======
+			while (backUpsSize - RestrictionSize > sizeToBeRemoved) {
+>>>>>>> main
 				sizeToBeRemoved += restorePoints.get(pointsToBeRemoved).BackupSize;
 				pointsToBeRemoved++;
 			}
@@ -190,8 +215,12 @@ public class BackUp {
 
 	int pointsToRemoveTimeRestriction() {
 		int pointsToBeRemoved = 0;
+<<<<<<< HEAD
 		while ((pointsToBeRemoved < restorePoints.size())
 				&& (restorePoints.get(pointsToBeRemoved).CreationTime.isBefore(RestrictionTime))) {
+=======
+		while (restorePoints.get(pointsToBeRemoved).CreationTime.isBefore(RestrictionTime)) {
+>>>>>>> main
 			pointsToBeRemoved++;
 		}
 		int numberOfDeltaPoints = 0;
