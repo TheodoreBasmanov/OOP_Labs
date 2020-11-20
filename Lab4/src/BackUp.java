@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,25 +13,17 @@ public class BackUp {
 	ArrayList<RestorePoint> restorePoints;
 	int lastRestorePoint = 0;
 	int lastDeltaPoint = 0;
-	boolean NumberRestriction = false;
-	boolean SizeRestriction = false;
-	boolean TimeRestriction = false;
-	int RestrictionN = 0;
-	long RestrictionSize = 0;
-	LocalDateTime RestrictionTime;
+	ArrayList<PointsRemoving> restrictions;
 	boolean MinPoints = true;
 	boolean MaxPoints = false;
 
 	BackUp() {
 		lastBackUpSize = 0;
-<<<<<<< HEAD
+		backUpsSize = 0;
 		files = new ArrayList<FileForBackup>();
 		deltaFiles = new ArrayList<FileForBackup>();
-=======
-		files = new ArrayList<String>();
-		deltaFiles = new ArrayList<String>();
->>>>>>> main
 		restorePoints = new ArrayList<RestorePoint>();
+		restrictions = new ArrayList<PointsRemoving>();
 	}
 
 	void addFile(String filePath) throws Exceptions.TheFileDoesntExist {
@@ -81,16 +72,11 @@ public class BackUp {
 		lastBackUpSize = restorePoint.BackupSize;
 		backUpsSize += restorePoint.BackupSize;
 		restorePoints.add(restorePoint);
-<<<<<<< HEAD
 		lastRestorePoint = restorePoints.size() - 1;
-=======
-		lastRestorePoint = restorePoints.size()-1;
->>>>>>> main
 		removePointsRestriction();
 	}
 
 	void createDeltaPoint() throws IOException, Exceptions.CantAddDeltaPoint {
-		
 		if (restorePoints.isEmpty()) {
 			throw new Exceptions.CantAddDeltaPoint();
 		}
@@ -101,37 +87,18 @@ public class BackUp {
 		backUpsSize += deltaSize;
 		RestorePoint deltaRestorePoint = new RestorePoint(ID, deltaFiles, true);
 		restorePoints.add(deltaRestorePoint);
-<<<<<<< HEAD
 		lastDeltaPoint = restorePoints.size() - 1;
-=======
-		lastDeltaPoint = restorePoints.size()-1;
->>>>>>> main
 		ID++;
 		refreshFiles();
 	}
 
-	void setNumberRestriction(int N) throws Exceptions.NegativeNumberRestriction {
-		if (N < 0) {
-			throw new Exceptions.NegativeNumberRestriction();
-		}
-		NumberRestriction = true;
-		RestrictionN = N;
+	void addRestriction(PointsRemoving restriction) {
+		restrictions.add(restriction);
 		removePointsRestriction();
 	}
 
-	void setSizeRestriction(long Size) throws Exceptions.NegativeSizeRestriction {
-		if (Size < 0) {
-			throw new Exceptions.NegativeSizeRestriction();
-		}
-		SizeRestriction = true;
-		RestrictionSize = Size;
-		removePointsRestriction();
-	}
-
-	void setTimeRestriction(LocalDateTime Time) {
-		TimeRestriction = true;
-		RestrictionTime = Time;
-		removePointsRestriction();
+	void removeRestriction(PointsRemoving restriction) {
+		restrictions.remove(restriction);
 	}
 
 	void setRestrictionsMax() {
@@ -153,89 +120,6 @@ public class BackUp {
 		return restorePoints.get(lastDeltaPoint);
 	}
 
-	int pointsToRemoveNumberRestriction() {
-<<<<<<< HEAD
-
-		if (restorePoints.size() > RestrictionN) {
-			if (restorePoints.size() >= 2) {
-
-=======
-	
-		if (restorePoints.size() > RestrictionN) {
-			if (restorePoints.size() >= 2) {
-				
->>>>>>> main
-				int numberOfDeltaPoints = 0;
-				int i = 1;
-				while ((i < restorePoints.size()) && (restorePoints.get(i).isDelta)) {
-					numberOfDeltaPoints++;
-					i++;
-				}
-				if (restorePoints.size() - numberOfDeltaPoints - 1 < RestrictionN) {
-					giveARemoveWarning();
-					return 0;
-
-				} else {
-					return restorePoints.size() - RestrictionN;
-				}
-			} else {
-				giveARestrictionWarning();
-				return 1;
-			}
-		}
-		return 0;
-	}
-
-	int pointsToRemoveSizeRestriction() {
-		if (backUpsSize > RestrictionSize) {
-			long sizeToBeRemoved = 0;
-			int pointsToBeRemoved = 0;
-<<<<<<< HEAD
-			while ((pointsToBeRemoved < restorePoints.size()) && (backUpsSize - RestrictionSize > sizeToBeRemoved)) {
-=======
-			while (backUpsSize - RestrictionSize > sizeToBeRemoved) {
->>>>>>> main
-				sizeToBeRemoved += restorePoints.get(pointsToBeRemoved).BackupSize;
-				pointsToBeRemoved++;
-			}
-			int numberOfDeltaPoints = 0;
-			int i = pointsToBeRemoved;
-			while ((i < restorePoints.size()) && (restorePoints.get(i).isDelta)) {
-				numberOfDeltaPoints++;
-			}
-			if (numberOfDeltaPoints + 1 > pointsToBeRemoved) {
-				giveARemoveWarning();
-				return 0;
-			} else {
-				return pointsToBeRemoved;
-			}
-		}
-		return 0;
-	}
-
-	int pointsToRemoveTimeRestriction() {
-		int pointsToBeRemoved = 0;
-<<<<<<< HEAD
-		while ((pointsToBeRemoved < restorePoints.size())
-				&& (restorePoints.get(pointsToBeRemoved).CreationTime.isBefore(RestrictionTime))) {
-=======
-		while (restorePoints.get(pointsToBeRemoved).CreationTime.isBefore(RestrictionTime)) {
->>>>>>> main
-			pointsToBeRemoved++;
-		}
-		int numberOfDeltaPoints = 0;
-		int i = pointsToBeRemoved;
-		while ((i < restorePoints.size()) && (restorePoints.get(i).isDelta)) {
-			numberOfDeltaPoints++;
-		}
-		if (numberOfDeltaPoints + 1 > pointsToBeRemoved) {
-			giveARemoveWarning();
-			return 0;
-		} else {
-			return pointsToBeRemoved;
-		}
-	}
-
 	void giveARemoveWarning() {
 		Logger logger = Logger.getLogger(BackUp.class.getName());
 		logger.setLevel(Level.WARNING);
@@ -250,45 +134,18 @@ public class BackUp {
 	}
 
 	void removePointsRestriction() {
-		if (NumberRestriction || SizeRestriction || TimeRestriction) {
+		if (!restrictions.isEmpty()) {
 			int pointsToBeRemoved = 0;
-			int pointsToBeRemovedNumber = 0;
-			int pointsToBeRemovedSize = 0;
-			int pointsToBeRemovedTime = 0;
-			if (NumberRestriction) {
-				pointsToBeRemovedNumber = pointsToRemoveNumberRestriction();
-			} else {
-				if (MinPoints) {
-					pointsToBeRemovedNumber = Integer.MAX_VALUE;
-				} else {
-					pointsToBeRemovedNumber = Integer.MIN_VALUE;
-				}
-			}
-			if (SizeRestriction) {
-				pointsToBeRemovedSize = pointsToRemoveSizeRestriction();
-			} else {
-				if (MinPoints) {
-					pointsToBeRemovedSize = Integer.MAX_VALUE;
-				} else {
-					pointsToBeRemovedSize = Integer.MIN_VALUE;
-				}
-			}
-			if (TimeRestriction) {
-				pointsToBeRemovedTime = pointsToRemoveTimeRestriction();
-			} else {
-				if (MinPoints) {
-					pointsToBeRemovedTime = Integer.MAX_VALUE;
-				} else {
-					pointsToBeRemovedTime = Integer.MIN_VALUE;
-				}
-			}
 			if (MinPoints) {
-				pointsToBeRemoved = Math.min(pointsToBeRemovedNumber,
-						Math.min(pointsToBeRemovedSize, pointsToBeRemovedTime));
-			}
-			if (MaxPoints) {
-				pointsToBeRemoved = Math.max(pointsToBeRemovedNumber,
-						Math.max(pointsToBeRemovedSize, pointsToBeRemovedTime));
+				pointsToBeRemoved = Integer.MAX_VALUE;
+				for (int i = 0; i < restrictions.size(); i++) {
+					pointsToBeRemoved = Math.min(pointsToBeRemoved, restrictions.get(i).PointsToRemove(this));
+				}
+			} else {
+				pointsToBeRemoved = Integer.MIN_VALUE;
+				for (int i = 0; i < restrictions.size(); i++) {
+					pointsToBeRemoved = Math.max(pointsToBeRemoved, restrictions.get(i).PointsToRemove(this));
+				}
 			}
 			lastRestorePoint -= pointsToBeRemoved;
 			lastDeltaPoint -= pointsToBeRemoved;
@@ -297,10 +154,6 @@ public class BackUp {
 				restorePoints.remove(0);
 				i++;
 			}
-			/*
-			 * for (int i = 0; i < pointsToBeRemoved; i++) {
-			 * restorePoints.remove(i); }
-			 */
 		}
 	}
 

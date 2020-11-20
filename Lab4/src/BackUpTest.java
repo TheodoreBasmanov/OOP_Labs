@@ -1,17 +1,9 @@
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.time.Clock;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
-<<<<<<< HEAD
 import java.util.concurrent.TimeUnit;
-=======
->>>>>>> main
 
 import org.junit.After;
 import org.junit.Assert;
@@ -31,21 +23,17 @@ public class BackUpTest {
 	@Test
 	public void numberRestrictionTest() throws IOException {
 		BackUp backUp = new BackUp();
-		backUp.setNumberRestriction(2);
+		backUp.addRestriction(new pointsToRemoveNumberRestriction(2));
 		backUp.addFile("test1.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test2.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test3.txt");
 		backUp.createRestorePoint();
-<<<<<<< HEAD
 		ArrayList<String> expected = new ArrayList<String>();
 		for(int i = 0; i<backUp.restorePoints.get(0).files.size();i++){
 			expected.add(backUp.restorePoints.get(0).files.get(i).name);
 		}
-=======
-		ArrayList<String> expected = backUp.restorePoints.get(0).files;
->>>>>>> main
 		ArrayList<String> actual = new ArrayList<String>();
 		actual.add("test1.txt");
 		actual.add("test2.txt");
@@ -55,21 +43,17 @@ public class BackUpTest {
 	@Test
 	public void sizeRestrictionTest() throws IOException {
 		BackUp backUp = new BackUp();
-		backUp.setSizeRestriction(20);
+		backUp.addRestriction(new pointsToRemoveSizeRestriction(20));
 		backUp.addFile("test1.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test2.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test3.txt");
 		backUp.createRestorePoint();
-<<<<<<< HEAD
 		ArrayList<String> expected = new ArrayList<String>();
 		for(int i = 0; i<backUp.restorePoints.get(0).files.size();i++){
 			expected.add(backUp.restorePoints.get(0).files.get(i).name);
 		}
-=======
-		ArrayList<String> expected = backUp.restorePoints.get(0).files;
->>>>>>> main
 		ArrayList<String> actual = new ArrayList<String>();
 		actual.add("test1.txt");
 		actual.add("test2.txt");
@@ -77,43 +61,21 @@ public class BackUpTest {
 		Assert.assertEquals(expected, actual);
 	}
 
-<<<<<<< HEAD
 	@Test
 	public void timeRestrictionTest() throws IOException, InterruptedException {
 		BackUp backUp = new BackUp();
 		backUp.addFile("test1.txt");
 		backUp.createRestorePoint();
-=======
-	/*@Test
-	public void timeRestrictionTest() throws IOException {
-		Clock clock = Clock.fixed(Instant.parse("2014-12-22T10:15:30.00Z"), ZoneId.of("UTC"));
-		System.out.println(LocalDateTime.now(clock));
-		BackUp backUp = new BackUp();
-		LocalDateTime time = LocalDateTime.of(2018, Month.JANUARY, 1, 1, 1);
-		backUp.setTimeRestriction(time);
-		backUp.addFile("test1.txt");
-		backUp.createRestorePoint();
-		Instant.now(Clock.fixed(Instant.parse("2020-08-22T10:00:00Z"), ZoneOffset.UTC));
->>>>>>> main
 		backUp.addFile("test2.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test3.txt");
 		backUp.createRestorePoint();
-<<<<<<< HEAD
 		TimeUnit.SECONDS.sleep(2);
-		backUp.setTimeRestriction(LocalDateTime.now());
+		backUp.addRestriction(new pointsToRemoveTimeRestriction(LocalDateTime.now()));
 		int expected = backUp.restorePoints.size();
 		int actual = 0;
 		Assert.assertEquals(expected == actual, true);
 	}
-=======
-		ArrayList<String> expected = backUp.restorePoints.get(0).files;
-		ArrayList<String> actual = new ArrayList<String>();
-		actual.add("test1.txt");
-		actual.add("test2.txt");
-		Assert.assertEquals(expected, actual);
-	}*/
->>>>>>> main
 	
 	@Test
 	public void testDeltasRestriction() throws IOException {
@@ -125,7 +87,7 @@ public class BackUpTest {
 		backUp.addFile("test3.txt");
 		backUp.createDeltaPoint();
 		backUp.createRestorePoint();
-		backUp.setNumberRestriction(2);
+		backUp.addRestriction(new pointsToRemoveNumberRestriction(2));
 		int expected = backUp.restorePoints.size();
 		int actual = 4;
 		Assert.assertEquals(expected == actual, true);
@@ -138,8 +100,8 @@ public class BackUpTest {
 		backUp.addFile("test2.txt");
 		backUp.addFile("test3.txt");
 		backUp.setRestrictionsMax();
-		backUp.setNumberRestriction(2);
-		backUp.setSizeRestriction(20);
+		backUp.addRestriction(new pointsToRemoveNumberRestriction(2));
+		backUp.addRestriction(new pointsToRemoveSizeRestriction(20));
 		backUp.createRestorePoint();
 		int expected = backUp.restorePoints.size();
 		int actual = 1;
@@ -152,20 +114,16 @@ public class BackUpTest {
 		backUp.addFile("test1.txt");
 		backUp.addFile("test2.txt");
 		backUp.createRestorePoint();
-<<<<<<< HEAD
 		ArrayList<String> expected = new ArrayList<String>();
 		for(int i = 0; i<backUp.restorePoints.get(0).files.size();i++){
 			expected.add(backUp.restorePoints.get(0).files.get(i).name);
 		}
-=======
-		ArrayList<String> expected = backUp.restorePoints.get(0).files;
->>>>>>> main
 		ArrayList<String> actual = new ArrayList<String>();
 		actual.add("test1.txt");
 		actual.add("test2.txt");
 		Assert.assertEquals(expected, actual);
 		backUp.createRestorePoint();
-		backUp.setNumberRestriction(1);
+		backUp.addRestriction(new pointsToRemoveNumberRestriction(1));
 		int expected1 = backUp.restorePoints.size();
 		int actual1 = 1;
 		Assert.assertEquals(expected1 == actual1, true);
@@ -180,7 +138,7 @@ public class BackUpTest {
 		long expected = backUp.backUpsSize;
 		long actual = 200;
 		Assert.assertEquals(expected == actual, true);
-		backUp.setSizeRestriction(150);
+		backUp.addRestriction(new pointsToRemoveSizeRestriction(150));
 		int expected1 = backUp.restorePoints.size();
 		int actual1 = 1;
 		Assert.assertEquals(expected1 == actual1, true);
