@@ -22,8 +22,7 @@ public class BackUpTest {
 
 	@Test
 	public void numberRestrictionTest() throws IOException {
-		BackUp backUp = new BackUp();
-		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
+		BackUp backUp = new BackUp(new CreatingPointsAlgorythm1());
 		backUp.setRemovingAlgorythm(new RemovingPointsRestrictions());
 		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).addRestriction(backUp, new pointsToRemoveNumberRestriction(2));
 		backUp.addFile("test1.txt");
@@ -44,8 +43,7 @@ public class BackUpTest {
 
 	@Test
 	public void sizeRestrictionTest() throws IOException {
-		BackUp backUp = new BackUp();
-		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
+		BackUp backUp = new BackUp(new CreatingPointsAlgorythm1());
 		backUp.setRemovingAlgorythm(new RemovingPointsRestrictions());
 		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).addRestriction(backUp, new pointsToRemoveSizeRestriction(20));
 		backUp.addFile("test1.txt");
@@ -67,8 +65,7 @@ public class BackUpTest {
 
 	@Test
 	public void timeRestrictionTest() throws IOException, InterruptedException {
-		BackUp backUp = new BackUp();
-		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
+		BackUp backUp = new BackUp(new CreatingPointsAlgorythm1());
 		backUp.addFile("test1.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test2.txt");
@@ -85,8 +82,7 @@ public class BackUpTest {
 	
 	@Test
 	public void testDeltasRestriction() throws IOException {
-		BackUp backUp = new BackUp();
-		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
+		BackUp backUp = new BackUp(new CreatingPointsAlgorythm1());
 		backUp.addFile("test1.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test2.txt");
@@ -103,8 +99,7 @@ public class BackUpTest {
 	
 	@Test
 	public void testMixedRestriction() throws IOException {
-		BackUp backUp = new BackUp();
-		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
+		BackUp backUp = new BackUp(new CreatingPointsAlgorythm1());
 		backUp.addFile("test1.txt");
 		backUp.addFile("test2.txt");
 		backUp.addFile("test3.txt");
@@ -120,8 +115,7 @@ public class BackUpTest {
 
 	@Test
 	public void test1() throws IOException {
-		BackUp backUp = new BackUp();
-		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
+		BackUp backUp = new BackUp(new CreatingPointsAlgorythm1());
 		backUp.addFile("test1.txt");
 		backUp.addFile("test2.txt");
 		backUp.createRestorePoint();
@@ -143,8 +137,7 @@ public class BackUpTest {
 
 	@Test
 	public void test2() throws IOException {
-		BackUp backUp = new BackUp();
-		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
+		BackUp backUp = new BackUp(new CreatingPointsAlgorythm1());
 		backUp.addFile("test4.txt");
 		backUp.createRestorePoint();
 		backUp.createRestorePoint();

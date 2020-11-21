@@ -14,12 +14,13 @@ public class BackUp {
 	RemovingPoints removingPointsAlgorythm;
 	CreatingPoints creatingPointsAlgorythm;
 
-	BackUp() {
+	BackUp(CreatingPoints algorythm) {
 		lastBackUpSize = 0;
 		backUpsSize = 0;
 		files = new ArrayList<FileForBackup>();
 		deltaFiles = new ArrayList<FileForBackup>();
 		restorePoints = new ArrayList<RestorePoint>();
+		creatingPointsAlgorythm = algorythm;
 	}
 
 	void addFile(String filePath) throws Exceptions.TheFileDoesntExist {
@@ -59,9 +60,9 @@ public class BackUp {
 			files.get(i).size = files.get(i).getSize();
 		}
 	}
-	void setCreatingAlgorythm(CreatingPoints algorythm) {
+	/*void setCreatingAlgorythm(CreatingPoints algorythm) {
 		creatingPointsAlgorythm = algorythm;
-	}
+	}*/
 	void createRestorePoint() throws IOException {
 		creatingPointsAlgorythm.CreateRestorePoint(this);
 	}
