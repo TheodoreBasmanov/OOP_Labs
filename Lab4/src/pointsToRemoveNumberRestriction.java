@@ -1,5 +1,5 @@
 
-public class pointsToRemoveNumberRestriction implements PointsRemoving {
+public class pointsToRemoveNumberRestriction implements PointsToRemove {
 	int RestrictionN;
 
 	pointsToRemoveNumberRestriction(int restrictionN) {
@@ -19,14 +19,14 @@ public class pointsToRemoveNumberRestriction implements PointsRemoving {
 					i++;
 				}
 				if (backUp.restorePoints.size() - numberOfDeltaPoints - 1 < RestrictionN) {
-					backUp.giveARemoveWarning();
+					RemovingPointsRestrictions.giveARemoveWarning();
 					return 0;
 
 				} else {
 					return backUp.restorePoints.size() - RestrictionN;
 				}
 			} else {
-				backUp.giveARestrictionWarning();
+				RemovingPointsRestrictions.giveARestrictionWarning();
 				return 1;
 			}
 		}

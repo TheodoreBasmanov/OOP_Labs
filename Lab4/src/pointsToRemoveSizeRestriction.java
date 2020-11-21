@@ -1,5 +1,5 @@
 
-public class pointsToRemoveSizeRestriction implements PointsRemoving {
+public class pointsToRemoveSizeRestriction implements PointsToRemove {
 	long RestrictionSize;
 
 	pointsToRemoveSizeRestriction(long restrictionSize) {
@@ -22,7 +22,7 @@ public class pointsToRemoveSizeRestriction implements PointsRemoving {
 				numberOfDeltaPoints++;
 			}
 			if (numberOfDeltaPoints + 1 > pointsToBeRemoved) {
-				backUp.giveARemoveWarning();
+				RemovingPointsRestrictions.giveARemoveWarning();
 				return 0;
 			} else {
 				return pointsToBeRemoved;

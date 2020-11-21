@@ -23,7 +23,9 @@ public class BackUpTest {
 	@Test
 	public void numberRestrictionTest() throws IOException {
 		BackUp backUp = new BackUp();
-		backUp.addRestriction(new pointsToRemoveNumberRestriction(2));
+		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
+		backUp.setRemovingAlgorythm(new RemovingPointsRestrictions());
+		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).addRestriction(backUp, new pointsToRemoveNumberRestriction(2));
 		backUp.addFile("test1.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test2.txt");
@@ -43,7 +45,9 @@ public class BackUpTest {
 	@Test
 	public void sizeRestrictionTest() throws IOException {
 		BackUp backUp = new BackUp();
-		backUp.addRestriction(new pointsToRemoveSizeRestriction(20));
+		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
+		backUp.setRemovingAlgorythm(new RemovingPointsRestrictions());
+		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).addRestriction(backUp, new pointsToRemoveSizeRestriction(20));
 		backUp.addFile("test1.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test2.txt");
@@ -64,6 +68,7 @@ public class BackUpTest {
 	@Test
 	public void timeRestrictionTest() throws IOException, InterruptedException {
 		BackUp backUp = new BackUp();
+		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
 		backUp.addFile("test1.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test2.txt");
@@ -71,7 +76,8 @@ public class BackUpTest {
 		backUp.addFile("test3.txt");
 		backUp.createRestorePoint();
 		TimeUnit.SECONDS.sleep(2);
-		backUp.addRestriction(new pointsToRemoveTimeRestriction(LocalDateTime.now()));
+		backUp.setRemovingAlgorythm(new RemovingPointsRestrictions());
+		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).addRestriction(backUp, new pointsToRemoveTimeRestriction(LocalDateTime.now()));
 		int expected = backUp.restorePoints.size();
 		int actual = 0;
 		Assert.assertEquals(expected == actual, true);
@@ -80,6 +86,7 @@ public class BackUpTest {
 	@Test
 	public void testDeltasRestriction() throws IOException {
 		BackUp backUp = new BackUp();
+		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
 		backUp.addFile("test1.txt");
 		backUp.createRestorePoint();
 		backUp.addFile("test2.txt");
@@ -87,7 +94,8 @@ public class BackUpTest {
 		backUp.addFile("test3.txt");
 		backUp.createDeltaPoint();
 		backUp.createRestorePoint();
-		backUp.addRestriction(new pointsToRemoveNumberRestriction(2));
+		backUp.setRemovingAlgorythm(new RemovingPointsRestrictions());
+		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).addRestriction(backUp, new pointsToRemoveNumberRestriction(2));
 		int expected = backUp.restorePoints.size();
 		int actual = 4;
 		Assert.assertEquals(expected == actual, true);
@@ -96,12 +104,14 @@ public class BackUpTest {
 	@Test
 	public void testMixedRestriction() throws IOException {
 		BackUp backUp = new BackUp();
+		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
 		backUp.addFile("test1.txt");
 		backUp.addFile("test2.txt");
 		backUp.addFile("test3.txt");
-		backUp.setRestrictionsMax();
-		backUp.addRestriction(new pointsToRemoveNumberRestriction(2));
-		backUp.addRestriction(new pointsToRemoveSizeRestriction(20));
+		backUp.setRemovingAlgorythm(new RemovingPointsRestrictions());
+		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).setRestrictionsMax();
+		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).addRestriction(backUp, new pointsToRemoveNumberRestriction(2));
+		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).addRestriction(backUp, new pointsToRemoveSizeRestriction(20));
 		backUp.createRestorePoint();
 		int expected = backUp.restorePoints.size();
 		int actual = 1;
@@ -111,6 +121,7 @@ public class BackUpTest {
 	@Test
 	public void test1() throws IOException {
 		BackUp backUp = new BackUp();
+		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
 		backUp.addFile("test1.txt");
 		backUp.addFile("test2.txt");
 		backUp.createRestorePoint();
@@ -123,7 +134,8 @@ public class BackUpTest {
 		actual.add("test2.txt");
 		Assert.assertEquals(expected, actual);
 		backUp.createRestorePoint();
-		backUp.addRestriction(new pointsToRemoveNumberRestriction(1));
+		backUp.setRemovingAlgorythm(new RemovingPointsRestrictions());
+		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).addRestriction(backUp, new pointsToRemoveNumberRestriction(1));
 		int expected1 = backUp.restorePoints.size();
 		int actual1 = 1;
 		Assert.assertEquals(expected1 == actual1, true);
@@ -132,13 +144,15 @@ public class BackUpTest {
 	@Test
 	public void test2() throws IOException {
 		BackUp backUp = new BackUp();
+		backUp.setCreatingAlgorythm(new CreatingPointsAlgorythm1());
 		backUp.addFile("test4.txt");
 		backUp.createRestorePoint();
 		backUp.createRestorePoint();
 		long expected = backUp.backUpsSize;
 		long actual = 200;
 		Assert.assertEquals(expected == actual, true);
-		backUp.addRestriction(new pointsToRemoveSizeRestriction(150));
+		backUp.setRemovingAlgorythm(new RemovingPointsRestrictions());
+		((RemovingPointsRestrictions)backUp.removingPointsAlgorythm).addRestriction(backUp, new pointsToRemoveSizeRestriction(150));
 		int expected1 = backUp.restorePoints.size();
 		int actual1 = 1;
 		Assert.assertEquals(expected1 == actual1, true);

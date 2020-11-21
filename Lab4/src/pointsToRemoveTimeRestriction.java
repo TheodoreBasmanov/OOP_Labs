@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class pointsToRemoveTimeRestriction implements PointsRemoving {
+public class pointsToRemoveTimeRestriction implements PointsToRemove {
 	LocalDateTime RestrictionTime;
 
 	pointsToRemoveTimeRestriction(LocalDateTime restrictionTime) {
@@ -20,7 +20,7 @@ public class pointsToRemoveTimeRestriction implements PointsRemoving {
 			numberOfDeltaPoints++;
 		}
 		if (numberOfDeltaPoints + 1 > pointsToBeRemoved) {
-			backUp.giveARemoveWarning();
+			RemovingPointsRestrictions.giveARemoveWarning();
 			return 0;
 		} else {
 			return pointsToBeRemoved;

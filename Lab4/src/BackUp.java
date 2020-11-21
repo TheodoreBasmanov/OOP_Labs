@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class BackUp {
 	private static int ID = 0;
@@ -13,9 +11,8 @@ public class BackUp {
 	ArrayList<RestorePoint> restorePoints;
 	int lastRestorePoint = 0;
 	int lastDeltaPoint = 0;
-	ArrayList<PointsRemoving> restrictions;
-	boolean MinPoints = true;
-	boolean MaxPoints = false;
+	RemovingPoints removingPointsAlgorythm;
+	CreatingPoints creatingPointsAlgorythm;
 
 	BackUp() {
 		lastBackUpSize = 0;
@@ -23,7 +20,6 @@ public class BackUp {
 		files = new ArrayList<FileForBackup>();
 		deltaFiles = new ArrayList<FileForBackup>();
 		restorePoints = new ArrayList<RestorePoint>();
-		restrictions = new ArrayList<PointsRemoving>();
 	}
 
 	void addFile(String filePath) throws Exceptions.TheFileDoesntExist {
@@ -63,47 +59,17 @@ public class BackUp {
 			files.get(i).size = files.get(i).getSize();
 		}
 	}
-
+	void setCreatingAlgorythm(CreatingPoints algorythm) {
+		creatingPointsAlgorythm = algorythm;
+	}
 	void createRestorePoint() throws IOException {
-		deltaFiles.clear();
-		refreshFiles();
-		RestorePoint restorePoint = new RestorePoint(ID, files, false);
-		ID++;
-		lastBackUpSize = restorePoint.BackupSize;
-		backUpsSize += restorePoint.BackupSize;
-		restorePoints.add(restorePoint);
-		lastRestorePoint = restorePoints.size() - 1;
-		removePointsRestriction();
+		creatingPointsAlgorythm.CreateRestorePoint(this);
 	}
-
 	void createDeltaPoint() throws IOException, Exceptions.CantAddDeltaPoint {
-		if (restorePoints.isEmpty()) {
-			throw new Exceptions.CantAddDeltaPoint();
-		}
-		checkForDeltaFiles();
-		RestorePoint tmpRestorePoint = new RestorePoint(ID, files, false);
-		long deltaSize = tmpRestorePoint.BackupSize - restorePoints.get(lastRestorePoint).BackupSize;
-		lastBackUpSize = tmpRestorePoint.BackupSize;
-		backUpsSize += deltaSize;
-		RestorePoint deltaRestorePoint = new RestorePoint(ID, deltaFiles, true);
-		restorePoints.add(deltaRestorePoint);
-		lastDeltaPoint = restorePoints.size() - 1;
-		ID++;
-		refreshFiles();
+		creatingPointsAlgorythm.CreateDeltaPoint(this);
 	}
-
-	void addRestriction(PointsRemoving restriction) {
-		restrictions.add(restriction);
-		removePointsRestriction();
-	}
-
-	void removeRestriction(PointsRemoving restriction) {
-		restrictions.remove(restriction);
-	}
-
-	void setRestrictionsMax() {
-		MaxPoints = true;
-		MinPoints = false;
+	void setRemovingAlgorythm(RemovingPoints algorythm) {
+		removingPointsAlgorythm = algorythm;
 	}
 
 	RestorePoint getLastRestorePoint() throws Exceptions.ThereAreNoRestorePoints {
@@ -120,41 +86,18 @@ public class BackUp {
 		return restorePoints.get(lastDeltaPoint);
 	}
 
-	void giveARemoveWarning() {
-		Logger logger = Logger.getLogger(BackUp.class.getName());
-		logger.setLevel(Level.WARNING);
-		logger.warning(
-				"Can't remove restore points above the number restriction, because then delta points will be left without the actual restore point.");
-	}
-
-	void giveARestrictionWarning() {
-		Logger logger = Logger.getLogger(BackUp.class.getName());
-		logger.setLevel(Level.WARNING);
-		logger.warning("You must have set the restriction so, that no points can be saved.");
-	}
-
-	void removePointsRestriction() {
-		if (!restrictions.isEmpty()) {
-			int pointsToBeRemoved = 0;
-			if (MinPoints) {
-				pointsToBeRemoved = Integer.MAX_VALUE;
-				for (int i = 0; i < restrictions.size(); i++) {
-					pointsToBeRemoved = Math.min(pointsToBeRemoved, restrictions.get(i).PointsToRemove(this));
-				}
-			} else {
-				pointsToBeRemoved = Integer.MIN_VALUE;
-				for (int i = 0; i < restrictions.size(); i++) {
-					pointsToBeRemoved = Math.max(pointsToBeRemoved, restrictions.get(i).PointsToRemove(this));
-				}
-			}
-			lastRestorePoint -= pointsToBeRemoved;
-			lastDeltaPoint -= pointsToBeRemoved;
-			int i = 0;
-			while (i < pointsToBeRemoved) {
-				restorePoints.remove(0);
-				i++;
-			}
+	void removePoints() {
+		if (removingPointsAlgorythm != null) {
+			removingPointsAlgorythm.removePoints(this);
 		}
+	}
+
+	public static int getID() {
+		return ID;
+	}
+
+	public static void setID(int iD) {
+		ID = iD;
 	}
 
 }
