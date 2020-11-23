@@ -9,10 +9,12 @@ public class Exceptions {
 		public TheFileDoesntExist(String errorMessage) {
 			super(errorMessage);
 		}
-		public TheFileDoesntExist(){
+
+		public TheFileDoesntExist() {
 			this("The file you are trying to add doesn't exist.");
 		}
 	}
+
 	public static class TheFileHasntBeenAdded extends RuntimeException {
 		/**
 		 * 
@@ -22,10 +24,12 @@ public class Exceptions {
 		public TheFileHasntBeenAdded(String errorMessage) {
 			super(errorMessage);
 		}
-		public TheFileHasntBeenAdded(){
+
+		public TheFileHasntBeenAdded() {
 			this("The file you are trying to remove wan't added.");
 		}
 	}
+
 	public static class CantAddDeltaPoint extends RuntimeException {
 		/**
 		 * 
@@ -35,10 +39,12 @@ public class Exceptions {
 		public CantAddDeltaPoint(String errorMessage) {
 			super(errorMessage);
 		}
-		public CantAddDeltaPoint(){
+
+		public CantAddDeltaPoint() {
 			this("The delta restore point can't be created, because there were no actual restore points created before.");
 		}
 	}
+
 	public static class ThereAreNoRestorePoints extends RuntimeException {
 		/**
 		 * 
@@ -48,10 +54,12 @@ public class Exceptions {
 		public ThereAreNoRestorePoints(String errorMessage) {
 			super(errorMessage);
 		}
-		public ThereAreNoRestorePoints(){
+
+		public ThereAreNoRestorePoints() {
 			this("No restore points have been created before.");
 		}
 	}
+
 	public static class ThereAreNoDeltaPoints extends RuntimeException {
 		/**
 		 * 
@@ -61,10 +69,12 @@ public class Exceptions {
 		public ThereAreNoDeltaPoints(String errorMessage) {
 			super(errorMessage);
 		}
-		public ThereAreNoDeltaPoints(){
+
+		public ThereAreNoDeltaPoints() {
 			this("No delta points have been created before.");
 		}
 	}
+
 	public static class NegativeNumberRestriction extends RuntimeException {
 		/**
 		 * 
@@ -74,10 +84,12 @@ public class Exceptions {
 		public NegativeNumberRestriction(String errorMessage) {
 			super(errorMessage);
 		}
-		public NegativeNumberRestriction(){
+
+		public NegativeNumberRestriction() {
 			this("You can't make a number restriction negative.");
 		}
 	}
+
 	public static class NegativeSizeRestriction extends RuntimeException {
 		/**
 		 * 
@@ -87,7 +99,8 @@ public class Exceptions {
 		public NegativeSizeRestriction(String errorMessage) {
 			super(errorMessage);
 		}
-		public NegativeSizeRestriction(){
+
+		public NegativeSizeRestriction() {
 			this("You can't make a size restriction negative.");
 		}
 	}

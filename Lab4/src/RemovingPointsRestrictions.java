@@ -32,12 +32,12 @@ public class RemovingPointsRestrictions implements RemovingPoints {
 			if (MinPoints) {
 				pointsToBeRemoved = Integer.MAX_VALUE;
 				for (int i = 0; i < restrictions.size(); i++) {
-					pointsToBeRemoved = Math.min(pointsToBeRemoved, restrictions.get(i).PointsToRemove(backUp));
+					pointsToBeRemoved = Math.min(pointsToBeRemoved, restrictions.get(i).pointsToRemove(backUp));
 				}
 			} else {
 				pointsToBeRemoved = Integer.MIN_VALUE;
 				for (int i = 0; i < restrictions.size(); i++) {
-					pointsToBeRemoved = Math.max(pointsToBeRemoved, restrictions.get(i).PointsToRemove(backUp));
+					pointsToBeRemoved = Math.max(pointsToBeRemoved, restrictions.get(i).pointsToRemove(backUp));
 				}
 			}
 			backUp.lastRestorePoint -= pointsToBeRemoved;
@@ -50,6 +50,7 @@ public class RemovingPointsRestrictions implements RemovingPoints {
 		}
 
 	}
+
 	static void giveARemoveWarning() {
 		Logger logger = Logger.getLogger(BackUp.class.getName());
 		logger.setLevel(Level.WARNING);

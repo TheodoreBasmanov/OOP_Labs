@@ -16,8 +16,9 @@ public class FileForBackup {
 		this.size = size;
 		this.sizeDifference = size;
 		modified = false;
-		
+
 	}
+
 	private long getFolderSize(File dir) {
 		long size = 0;
 		for (File file : dir.listFiles()) {
@@ -29,7 +30,8 @@ public class FileForBackup {
 		}
 		return size;
 	}
-	long getSize(){
+
+	long getSize() {
 		if (file.isDirectory()) {
 			return getFolderSize(file);
 		} else {
@@ -37,5 +39,3 @@ public class FileForBackup {
 		}
 	}
 }
-
-

@@ -1,6 +1,7 @@
 
 public interface PointsToRemove {
-	int PointsToRemove(BackUp backUp);
-	 @Override
-     public boolean equals(Object o);
+	int pointsToRemove(BackUp backUp);
+
+	@Override
+	public boolean equals(Object o);
 }

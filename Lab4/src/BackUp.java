@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class BackUp {
-	private static int ID = 0;
 	long lastBackUpSize;
 	long backUpsSize;
 	ArrayList<FileForBackup> files;
@@ -12,15 +11,14 @@ public class BackUp {
 	int lastRestorePoint = 0;
 	int lastDeltaPoint = 0;
 	RemovingPoints removingPointsAlgorythm;
-	CreatingPoints creatingPointsAlgorythm;
 
-	BackUp(CreatingPoints algorythm) {
+	BackUp() {
 		lastBackUpSize = 0;
 		backUpsSize = 0;
 		files = new ArrayList<FileForBackup>();
 		deltaFiles = new ArrayList<FileForBackup>();
 		restorePoints = new ArrayList<RestorePoint>();
-		creatingPointsAlgorythm = algorythm;
+		// creatingPointsAlgorythm = algorythm;
 	}
 
 	void addFile(String filePath) throws Exceptions.TheFileDoesntExist {
@@ -60,15 +58,11 @@ public class BackUp {
 			files.get(i).size = files.get(i).getSize();
 		}
 	}
-	/*void setCreatingAlgorythm(CreatingPoints algorythm) {
-		creatingPointsAlgorythm = algorythm;
-	}*/
-	void createRestorePoint() throws IOException {
-		creatingPointsAlgorythm.CreateRestorePoint(this);
+
+	void createAPoint(CreatingPoints algorythm) throws IOException {
+		algorythm.CreateAPoint(this);
 	}
-	void createDeltaPoint() throws IOException, Exceptions.CantAddDeltaPoint {
-		creatingPointsAlgorythm.CreateDeltaPoint(this);
-	}
+
 	void setRemovingAlgorythm(RemovingPoints algorythm) {
 		removingPointsAlgorythm = algorythm;
 	}
@@ -92,13 +86,4 @@ public class BackUp {
 			removingPointsAlgorythm.removePoints(this);
 		}
 	}
-
-	public static int getID() {
-		return ID;
-	}
-
-	public static void setID(int iD) {
-		ID = iD;
-	}
-
 }

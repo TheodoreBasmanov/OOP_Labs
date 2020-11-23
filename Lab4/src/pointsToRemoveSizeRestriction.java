@@ -7,7 +7,7 @@ public class pointsToRemoveSizeRestriction implements PointsToRemove {
 	}
 
 	@Override
-	public int PointsToRemove(BackUp backUp) {
+	public int pointsToRemove(BackUp backUp) {
 		if (backUp.backUpsSize > RestrictionSize) {
 			long sizeToBeRemoved = 0;
 			int pointsToBeRemoved = 0;

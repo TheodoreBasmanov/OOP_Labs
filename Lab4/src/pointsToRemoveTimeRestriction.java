@@ -8,7 +8,7 @@ public class pointsToRemoveTimeRestriction implements PointsToRemove {
 	}
 
 	@Override
-	public int PointsToRemove(BackUp backUp) {
+	public int pointsToRemove(BackUp backUp) {
 		int pointsToBeRemoved = 0;
 		while ((pointsToBeRemoved < backUp.restorePoints.size())
 				&& (backUp.restorePoints.get(pointsToBeRemoved).CreationTime.isBefore(RestrictionTime))) {

@@ -27,9 +27,9 @@ public class RestorePointTest {
 		files.add(new FileForBackup("test1.txt"));
 		files.add(new FileForBackup("test2.txt"));
 		files.add(new FileForBackup("test3.txt"));
-		RestorePoint restorePoint = new RestorePoint(1, files, false);
+		RestorePoint restorePoint = new RestorePoint(files, false);
 		long expected = restorePoint.BackupSize;
-		long actual = files.get(0).file.length()+files.get(1).file.length()+files.get(2).file.length();
+		long actual = files.get(0).file.length() + files.get(1).file.length() + files.get(2).file.length();
 		Assert.assertEquals(expected == actual, true);
 	}
 
@@ -43,7 +43,7 @@ public class RestorePointTest {
 		pw.write("diff");
 		pw.close();
 		files.get(0).modified = true;
-		RestorePoint restorePoint = new RestorePoint(1, files, true);
+		RestorePoint restorePoint = new RestorePoint(files, true);
 		long expected = restorePoint.BackupSize;
 		long actual = 14;
 		Assert.assertEquals(expected == actual, true);

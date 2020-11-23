@@ -1,5 +1,5 @@
+import java.io.IOException;
 
 public interface CreatingPoints {
-public void CreateRestorePoint(BackUp backUp);
-public void CreateDeltaPoint(BackUp backUp);
+	public void CreateAPoint(BackUp backUp) throws IOException;
 }
