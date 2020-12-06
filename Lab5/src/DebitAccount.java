@@ -25,13 +25,19 @@ public class DebitAccount extends Account {
 		scheduler.scheduleAtFixedRate(monthlyPercentCount, 30, 30, TimeUnit.DAYS);
 	}
 
+	DebitAccount(Client client, double percent) {
+		this(client);
+		this.percent = percent;
+	}
+
 	void setPercent(double percent) {
 		this.percent = percent;
 	}
 
 	@Override
 	public void withdraw(double summ) throws Exceptions.CantBeNegative, Exceptions.OverUnrealible {
-		checkSumm(summ);
+		checkSummReliable(summ);
+		checkSummNegative(summ);
 		if (summ <= moneySumm) {
 			moneySumm -= summ;
 			Transaction transaction = new Transaction(this, null, summ);
@@ -49,7 +55,8 @@ public class DebitAccount extends Account {
 	@Override
 	public void transfer(double summ, int accountID)
 			throws Exceptions.IncorrectIDAccount, Exceptions.CantBeNegative, Exceptions.OverUnrealible {
-		checkSumm(summ);
+		checkSummReliable(summ);
+		checkSummNegative(summ);
 		if (summ <= moneySumm) {
 			moneySumm -= summ;
 			int toWhere = -1;

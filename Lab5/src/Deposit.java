@@ -30,6 +30,13 @@ public class Deposit extends Account {
 		scheduler.scheduleAtFixedRate(monthlyPercentCount, 30, 30, TimeUnit.DAYS);
 	}
 
+	Deposit(Client client, int months, int days, double percent, double initialSumm) {
+		this(client);
+		period = Period.ofMonths(months).plusDays(days);
+		this.percent = percent;
+		this.moneySumm = initialSumm;
+	}
+
 	void setPeriod(int months, int days) {
 		period = Period.ofMonths(months).plusDays(days);
 	}
@@ -40,8 +47,9 @@ public class Deposit extends Account {
 
 	public void withdraw(double summ)
 			throws Exceptions.CantBeNegative, Exceptions.NotAfterThePeriod, Exceptions.OverUnrealible {
-		checkSumm(summ);
-		if (LocalDate.now().isBefore(creationDate.plus(period))) {
+		checkSummReliable(summ);
+		checkSummNegative(summ);
+		if (!LocalDate.now().isBefore(creationDate.plus(period))) {
 			if (summ <= moneySumm) {
 				moneySumm -= summ;
 				Transaction transaction = new Transaction(this, null, summ);
@@ -55,6 +63,7 @@ public class Deposit extends Account {
 
 	@Override
 	public void putIn(double summ) {
+		checkSummNegative(summ);
 		moneySumm += summ;
 		Transaction transaction = new Transaction(null, this, summ);
 	}
@@ -62,7 +71,8 @@ public class Deposit extends Account {
 	@Override
 	public void transfer(double summ, int accountID) throws Exceptions.IncorrectIDAccount, Exceptions.CantBeNegative,
 			Exceptions.NotAfterThePeriod, Exceptions.OverUnrealible {
-		checkSumm(summ);
+		checkSummReliable(summ);
+		checkSummNegative(summ);
 		if (LocalDate.now().isBefore(creationDate.plus(period))) {
 			if (summ <= moneySumm) {
 				moneySumm -= summ;

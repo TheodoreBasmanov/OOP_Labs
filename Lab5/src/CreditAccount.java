@@ -17,6 +17,12 @@ public class CreditAccount extends Account {
 		scheduler.scheduleAtFixedRate(monthlyComission, 30, 30, TimeUnit.DAYS);
 	}
 
+	CreditAccount(Client client, double comission, double limit) {
+		this(client);
+		this.comission = comission;
+		this.creditLimit = limit;
+	}
+
 	void setComission(double comission) {
 		this.comission = comission;
 	}
@@ -27,7 +33,8 @@ public class CreditAccount extends Account {
 
 	@Override
 	public void withdraw(double summ) throws Exceptions.BelowTheLimit, Exceptions.OverUnrealible {
-		checkSumm(summ);
+		checkSummReliable(summ);
+		checkSummNegative(summ);
 		if (summ <= moneySumm + creditLimit) {
 			moneySumm -= summ;
 			Transaction transaction = new Transaction(this, null, summ);
@@ -38,6 +45,7 @@ public class CreditAccount extends Account {
 
 	@Override
 	public void putIn(double summ) {
+		checkSummNegative(summ);
 		moneySumm += summ;
 		Transaction transaction = new Transaction(null, this, summ);
 	}
@@ -45,7 +53,8 @@ public class CreditAccount extends Account {
 	@Override
 	public void transfer(double summ, int accountID)
 			throws Exceptions.IncorrectIDAccount, Exceptions.BelowTheLimit, Exceptions.OverUnrealible {
-		checkSumm(summ);
+		checkSummReliable(summ);
+		checkSummNegative(summ);
 		if (summ <= moneySumm + creditLimit) {
 			moneySumm -= summ;
 			int toWhere = -1;

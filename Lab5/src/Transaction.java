@@ -9,12 +9,12 @@ public class Transaction {
 	double summ;
 
 	Transaction(Account one, Account two, double summ) {
-		if (!one.equals(null)) {
+		if (one != null) {
 			this.accountIDOne = one.id;
 		} else {
 			this.accountIDOne = -1;
 		}
-		if (!two.equals(null)) {
+		if (two != null) {
 			this.accountIDTwo = two.id;
 		} else {
 			this.accountIDTwo = -1;
@@ -23,32 +23,32 @@ public class Transaction {
 		id = ID;
 		ID++;
 		transactions.add(this);
-		if (!one.equals(null)) {
+		if (one != null) {
 			one.client.bank.transactionIDs.add(id);
 		}
-		if (!two.equals(null)) {
+		if (two != null) {
 			two.client.bank.transactionIDs.add(id);
 		}
 	}
 
-	static void undo(int id) throws Exceptions.IncorrectIDTransaction{
+	static void undo(int id) throws Exceptions.IncorrectIDTransaction {
 		for (int i = 0; i < transactions.size(); i++) {
 			if (transactions.get(i).id == id) {
 				if (transactions.get(i).accountIDOne != -1) {
-					for (i = 0; i < Account.accounts.size(); i++) {
-						if (Account.accounts.get(i).id == transactions.get(i).accountIDOne) {
-							Account.accounts.get(i).moneySumm += transactions.get(i).summ;
+					for (int j = 0; j < Account.accounts.size(); j++) {
+						if (Account.accounts.get(j).id == transactions.get(i).accountIDOne) {
+							Account.accounts.get(j).moneySumm += transactions.get(i).summ;
 						}
 					}
 				}
 				if (transactions.get(i).accountIDTwo != -1) {
-					for (i = 0; i < Account.accounts.size(); i++) {
-						if (Account.accounts.get(i).id == transactions.get(i).accountIDTwo) {
-							Account.accounts.get(i).moneySumm -= transactions.get(i).summ;
+					for (int j = 0; j < Account.accounts.size(); j++) {
+						if (Account.accounts.get(j).id == transactions.get(i).accountIDTwo) {
+							Account.accounts.get(j).moneySumm -= transactions.get(i).summ;
 						}
 					}
 				}
-				break;
+				return;
 			}
 		}
 		throw new Exceptions.IncorrectIDTransaction();

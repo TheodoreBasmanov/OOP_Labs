@@ -15,6 +15,7 @@ public class Account implements IAccount {
 		moneySumm = 0;
 		accounts.add(this);
 		client.accountIDs.add(id);
+		this.client = client;
 		unreliableSumm = client.bank.unrealiableSumm;
 	}
 
@@ -44,9 +45,15 @@ public class Account implements IAccount {
 		return id == c.id;
 	}
 
-	void checkSumm(double summ) throws Exceptions.OverUnrealible {
+	void checkSummReliable(double summ) throws Exceptions.OverUnrealible {
 		if (!client.isReliable && summ > unreliableSumm) {
 			throw new Exceptions.OverUnrealible();
+		}
+	}
+
+	void checkSummNegative(double summ) throws Exceptions.NegativeMoneySumm {
+		if (summ < 0) {
+			throw new Exceptions.NegativeMoneySumm();
 		}
 	}
 
