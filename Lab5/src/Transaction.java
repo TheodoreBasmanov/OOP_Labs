@@ -31,21 +31,28 @@ public class Transaction {
 		}
 	}
 
-	void undo() {
-		if (accountIDOne != -1) {
-			for (int i = 0; i < Account.accounts.size(); i++) {
-				if (Account.accounts.get(i).id == accountIDOne) {
-					Account.accounts.get(i).moneySumm += summ;
+	static void undo(int id) throws Exceptions.IncorrectIDTransaction{
+		for (int i = 0; i < transactions.size(); i++) {
+			if (transactions.get(i).id == id) {
+				if (transactions.get(i).accountIDOne != -1) {
+					for (i = 0; i < Account.accounts.size(); i++) {
+						if (Account.accounts.get(i).id == transactions.get(i).accountIDOne) {
+							Account.accounts.get(i).moneySumm += transactions.get(i).summ;
+						}
+					}
 				}
+				if (transactions.get(i).accountIDTwo != -1) {
+					for (i = 0; i < Account.accounts.size(); i++) {
+						if (Account.accounts.get(i).id == transactions.get(i).accountIDTwo) {
+							Account.accounts.get(i).moneySumm -= transactions.get(i).summ;
+						}
+					}
+				}
+				break;
 			}
 		}
-		if (accountIDTwo != -1) {
-			for (int i = 0; i < Account.accounts.size(); i++) {
-				if (Account.accounts.get(i).id == accountIDTwo) {
-					Account.accounts.get(i).moneySumm -= summ;
-				}
-			}
-		}
+		throw new Exceptions.IncorrectIDTransaction();
+
 		/*
 		 * for(int i =0; i<transactions.size();i++){
 		 * if(transactions.get(i).id==id){ transactions.remove(i); } }

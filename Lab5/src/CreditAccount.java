@@ -2,41 +2,37 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class DebitAccount extends Account {
-	double percent;
-	double summToAdd;
+public class CreditAccount extends Account {
+	double comission;
+	double creditLimit;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-	final Runnable dailyPercentCount = new Runnable() {
+	final Runnable monthlyComission = new Runnable() {
 		public void run() {
-			dailyPercent();
-		}
-	};
-	final Runnable monthlyPercentCount = new Runnable() {
-		public void run() {
-			monthlyPercent();
+			comission();
 		}
 	};
 
-	DebitAccount(Client client) {
+	CreditAccount(Client client) {
 		super(client);
-		summToAdd = 0;
-		scheduler.scheduleAtFixedRate(dailyPercentCount, 1, 1, TimeUnit.DAYS);
-		scheduler.scheduleAtFixedRate(monthlyPercentCount, 30, 30, TimeUnit.DAYS);
+		scheduler.scheduleAtFixedRate(monthlyComission, 30, 30, TimeUnit.DAYS);
 	}
 
-	void setPercent(double percent) {
-		this.percent = percent;
+	void setComission(double comission) {
+		this.comission = comission;
+	}
+
+	void setLimit(double limit) {
+		this.creditLimit = limit;
 	}
 
 	@Override
-	public void withdraw(double summ) throws Exceptions.CantBeNegative, Exceptions.OverUnrealible {
+	public void withdraw(double summ) throws Exceptions.BelowTheLimit, Exceptions.OverUnrealible {
 		checkSumm(summ);
-		if (summ <= moneySumm) {
+		if (summ <= moneySumm + creditLimit) {
 			moneySumm -= summ;
 			Transaction transaction = new Transaction(this, null, summ);
 		} else {
-			throw new Exceptions.CantBeNegative();
+			throw new Exceptions.BelowTheLimit();
 		}
 	}
 
@@ -48,9 +44,9 @@ public class DebitAccount extends Account {
 
 	@Override
 	public void transfer(double summ, int accountID)
-			throws Exceptions.IncorrectIDAccount, Exceptions.CantBeNegative, Exceptions.OverUnrealible {
+			throws Exceptions.IncorrectIDAccount, Exceptions.BelowTheLimit, Exceptions.OverUnrealible {
 		checkSumm(summ);
-		if (summ <= moneySumm) {
+		if (summ <= moneySumm + creditLimit) {
 			moneySumm -= summ;
 			int toWhere = -1;
 			for (int i = 0; i < Account.accounts.size(); i++) {
@@ -66,17 +62,14 @@ public class DebitAccount extends Account {
 				Transaction transaction = new Transaction(this, Account.accounts.get(toWhere), summ);
 			}
 		} else {
-			throw new Exceptions.CantBeNegative();
+			throw new Exceptions.BelowTheLimit();
 		}
 	}
 
-	void dailyPercent() {
-		summToAdd += moneySumm * percent / 365;
-	}
-
-	void monthlyPercent() {
-		moneySumm += summToAdd;
-		summToAdd = 0;
+	void comission() {
+		if (moneySumm < 0) {
+			moneySumm -= comission;
+		}
 	}
 
 }
