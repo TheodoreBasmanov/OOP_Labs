@@ -1,24 +1,17 @@
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.time.Period;
+import java.time.YearMonth;
 
 public class CreditAccount extends Account {
 	double comission;
 	double creditLimit;
-	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-	final Runnable monthlyComission = new Runnable() {
-		public void run() {
-			comission();
-		}
-	};
 
-	CreditAccount(Client client) {
-		super(client);
-		scheduler.scheduleAtFixedRate(monthlyComission, 30, 30, TimeUnit.DAYS);
+	CreditAccount(Client client, DateGiver date) {
+		super(client, date);
 	}
 
-	CreditAccount(Client client, double comission, double limit) {
-		this(client);
+	CreditAccount(Client client, DateGiver date, double comission, double limit) {
+		this(client, date);
 		this.comission = comission;
 		this.creditLimit = limit;
 	}
@@ -36,6 +29,7 @@ public class CreditAccount extends Account {
 		checkSummReliable(summ);
 		checkSummNegative(summ);
 		if (summ <= moneySumm + creditLimit) {
+			updateMoneySumm();
 			moneySumm -= summ;
 			Transaction transaction = new Transaction(this, null, summ);
 		} else {
@@ -46,6 +40,7 @@ public class CreditAccount extends Account {
 	@Override
 	public void putIn(double summ) {
 		checkSummNegative(summ);
+		updateMoneySumm();
 		moneySumm += summ;
 		Transaction transaction = new Transaction(null, this, summ);
 	}
@@ -56,6 +51,7 @@ public class CreditAccount extends Account {
 		checkSummReliable(summ);
 		checkSummNegative(summ);
 		if (summ <= moneySumm + creditLimit) {
+			updateMoneySumm();
 			moneySumm -= summ;
 			int toWhere = -1;
 			for (int i = 0; i < Account.accounts.size(); i++) {
@@ -75,10 +71,18 @@ public class CreditAccount extends Account {
 		}
 	}
 
-	void comission() {
-		if (moneySumm < 0) {
-			moneySumm -= comission;
+	protected void updateMoneySumm() {
+		long days = Duration.between(time, date.getDate()).toDays();
+		YearMonth month = YearMonth.of(date.getDate().getYear(), date.getDate().getMonthValue() - 1);
+		if (days == 0) {
+			return;
 		}
+		daysCounter += days;
+		if (daysCounter >= month.lengthOfMonth()) {
+			moneySumm -= comission * Period.between(time.toLocalDate(), date.getDate().toLocalDate()).getMonths();
+			daysCounter = daysCounter - month.lengthOfMonth();
+		}
+		time = date.getDate();
 	}
 
 }

@@ -61,14 +61,14 @@ public class Bank {
 		throw new Exceptions.IncorrectIDClient();
 	}
 
-	void createDebitAccount(int clientID, double percent)
+	void createDebitAccount(int clientID, DateGiver date, double percent)
 			throws Exceptions.IncorrectIDClient, Exceptions.NegativePercent {
 		if (percent < 0) {
 			throw new Exceptions.NegativePercent();
 		}
 		for (int i = 0; i < clients.size(); i++) {
 			if (clients.get(i).id == clientID) {
-				DebitAccount newAccount = new DebitAccount(clients.get(i), percent);
+				DebitAccount newAccount = new DebitAccount(clients.get(i), date, percent);
 				accountIDs.add(newAccount.id);
 				break;
 			}
@@ -76,7 +76,7 @@ public class Bank {
 		throw new Exceptions.IncorrectIDClient();
 	}
 
-	void createDeposit(int clientID, int months, int days, double initialSumm)
+	void createDeposit(int clientID, DateGiver date, int months, int days, double initialSumm)
 			throws Exceptions.IncorrectIDClient, Exceptions.WrongDepositPercents, Exceptions.NegativeTime,
 			Exceptions.NegativeMoneySumm, Exceptions.NegativePercent {
 		if (months < 0 || days < 0) {
@@ -100,7 +100,7 @@ public class Bank {
 				if (percent < 0) {
 					throw new Exceptions.NegativePercent();
 				}
-				Deposit newAccount = new Deposit(clients.get(i), months, days, percent, initialSumm);
+				Deposit newAccount = new Deposit(clients.get(i), date, months, days, percent, initialSumm);
 				accountIDs.add(newAccount.id);
 				break;
 			}
@@ -108,7 +108,7 @@ public class Bank {
 		throw new Exceptions.IncorrectIDClient();
 	}
 
-	void createCreditAccount(int clientID, double comission, double limit)
+	void createCreditAccount(int clientID, DateGiver date, double comission, double limit)
 			throws Exceptions.IncorrectIDClient, Exceptions.NegativeComission, Exceptions.NegativeLimit {
 		if (comission < 0) {
 			throw new Exceptions.NegativeComission();
@@ -118,7 +118,7 @@ public class Bank {
 		}
 		for (int i = 0; i < clients.size(); i++) {
 			if (clients.get(i).id == clientID) {
-				CreditAccount newAccount = new CreditAccount(clients.get(i), comission, limit);
+				CreditAccount newAccount = new CreditAccount(clients.get(i), date, comission, limit);
 				accountIDs.add(newAccount.id);
 				break;
 			}

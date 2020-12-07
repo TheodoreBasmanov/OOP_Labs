@@ -1,32 +1,17 @@
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.time.YearMonth;
 
 public class DebitAccount extends Account {
 	double percent;
 	double summToAdd;
-	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-	final Runnable dailyPercentCount = new Runnable() {
-		public void run() {
-			dailyPercent();
-		}
-	};
-	final Runnable monthlyPercentCount = new Runnable() {
-		public void run() {
-			monthlyPercent();
-		}
-	};
-
-	DebitAccount(Client client) {
-		super(client);
+	DebitAccount(Client client, DateGiver date) {
+		super(client, date);
 		summToAdd = 0;
-		scheduler.scheduleAtFixedRate(dailyPercentCount, 1, 1, TimeUnit.DAYS);
-		scheduler.scheduleAtFixedRate(monthlyPercentCount, 30, 30, TimeUnit.DAYS);
 	}
 
-	DebitAccount(Client client, double percent) {
-		this(client);
+	DebitAccount(Client client, DateGiver date, double percent) {
+		this(client, date);
 		this.percent = percent;
 	}
 
@@ -34,11 +19,11 @@ public class DebitAccount extends Account {
 		this.percent = percent;
 	}
 
-	@Override
 	public void withdraw(double summ) throws Exceptions.CantBeNegative, Exceptions.OverUnrealible {
 		checkSummReliable(summ);
 		checkSummNegative(summ);
 		if (summ <= moneySumm) {
+			updateMoneySumm();
 			moneySumm -= summ;
 			Transaction transaction = new Transaction(this, null, summ);
 		} else {
@@ -46,18 +31,19 @@ public class DebitAccount extends Account {
 		}
 	}
 
-	@Override
 	public void putIn(double summ) {
+		checkSummNegative(summ);
+		updateMoneySumm();
 		moneySumm += summ;
 		Transaction transaction = new Transaction(null, this, summ);
 	}
 
-	@Override
 	public void transfer(double summ, int accountID)
 			throws Exceptions.IncorrectIDAccount, Exceptions.CantBeNegative, Exceptions.OverUnrealible {
 		checkSummReliable(summ);
 		checkSummNegative(summ);
 		if (summ <= moneySumm) {
+			updateMoneySumm();
 			moneySumm -= summ;
 			int toWhere = -1;
 			for (int i = 0; i < Account.accounts.size(); i++) {
@@ -77,13 +63,21 @@ public class DebitAccount extends Account {
 		}
 	}
 
-	void dailyPercent() {
-		summToAdd += moneySumm * percent / 365;
+	protected void updateMoneySumm() {
+		long days = Duration.between(time, date.getDate()).toDays();
+		YearMonth month = YearMonth.of(date.getDate().getYear(), date.getDate().getMonthValue() - 1);
+		if (days == 0) {
+			return;
+		}
+		for (int i = 0; i < days; i++) {
+			summToAdd += (moneySumm + summToAdd) * percent / month.lengthOfYear() / 100;
+		}
+		time = date.getDate();
+		daysCounter += days;
+		if (daysCounter >= month.lengthOfMonth()) {
+			moneySumm += summToAdd;
+			summToAdd = 0;
+			daysCounter = daysCounter - month.lengthOfMonth();
+		}
 	}
-
-	void monthlyPercent() {
-		moneySumm += summToAdd;
-		summToAdd = 0;
-	}
-
 }

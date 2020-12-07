@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Account implements IAccount {
@@ -7,16 +8,28 @@ public class Account implements IAccount {
 	double moneySumm;
 	Client client;
 	double unreliableSumm;
-
-	// double percent;
-	Account(Client client) {
+	protected DateGiver date;
+	protected LocalDateTime time;
+	protected int daysCounter = 0;
+	Account(Client client, DateGiver date) {
 		id = ID;
 		ID++;
 		moneySumm = 0;
 		accounts.add(this);
 		client.accountIDs.add(id);
 		this.client = client;
+		this.date = date;
+		time = date.getDate();
 		unreliableSumm = client.bank.unrealiableSumm;
+	}
+
+	void setDate(DateGiver date) {
+		this.date = date;
+	}
+
+	double getBalance() {
+		this.updateMoneySumm();
+		return moneySumm;
 	}
 
 	@Override
@@ -31,6 +44,9 @@ public class Account implements IAccount {
 
 	@Override
 	public void transfer(double summ, int accountID) {
+	}
+
+	protected void updateMoneySumm() {
 	}
 
 	@Override

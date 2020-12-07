@@ -17,12 +17,13 @@ public class TransactionTest {
 
 	@Test
 	public void testUndo() {
+		TestDate date = new TestDate();
 		Bank bank = new Bank(100, null);
 		ClientBuilder newClient = new ClientBuilder(bank).withFullname("name", "surname").withAddress("address")
 				.withInNumber("IDNumber");
 		Client client = newClient.build();
-		DebitAccount account = new DebitAccount(client, 10);
-		DebitAccount account2 = new DebitAccount(client, 10);
+		DebitAccount account = new DebitAccount(client, date, 10);
+		DebitAccount account2 = new DebitAccount(client, date, 10);
 		account.putIn(100);
 		account.transfer(50, account2.id);
 		Transaction.undo(Transaction.transactions.get(1).id);
