@@ -22,44 +22,42 @@ public class DebitAccount extends Account {
 	public void withdraw(double summ) throws Exceptions.CantBeNegative, Exceptions.OverUnrealible {
 		checkSummReliable(summ);
 		checkSummNegative(summ);
-		if (summ <= moneySumm) {
-			updateMoneySumm();
-			moneySumm -= summ;
-			Transaction transaction = new Transaction(this, null, summ);
-		} else {
+		if (summ > moneySumm) {
 			throw new Exceptions.CantBeNegative();
 		}
+		updateMoneySumm();
+		moneySumm -= summ;
+		TransactionSingleOperation transaction = new TransactionSingleOperation(this, -summ);
 	}
 
 	public void putIn(double summ) {
 		checkSummNegative(summ);
 		updateMoneySumm();
 		moneySumm += summ;
-		Transaction transaction = new Transaction(null, this, summ);
+		TransactionSingleOperation transaction = new TransactionSingleOperation(this, summ);
 	}
 
 	public void transfer(double summ, int accountID)
 			throws Exceptions.IncorrectIDAccount, Exceptions.CantBeNegative, Exceptions.OverUnrealible {
 		checkSummReliable(summ);
 		checkSummNegative(summ);
-		if (summ <= moneySumm) {
-			updateMoneySumm();
-			moneySumm -= summ;
-			int toWhere = -1;
-			for (int i = 0; i < Account.accounts.size(); i++) {
-				if (Account.accounts.get(i).id == accountID) {
-					toWhere = i;
-					break;
-				}
-			}
-			if (toWhere == -1) {
-				throw new Exceptions.IncorrectIDAccount();
-			} else {
-				Account.accounts.get(toWhere).moneySumm += summ;
-				Transaction transaction = new Transaction(this, Account.accounts.get(toWhere), summ);
-			}
-		} else {
+		if (summ > moneySumm) {
 			throw new Exceptions.CantBeNegative();
+		}
+		updateMoneySumm();
+		moneySumm -= summ;
+		int toWhere = -1;
+		for (int i = 0; i < Account.accounts.size(); i++) {
+			if (Account.accounts.get(i).id == accountID) {
+				toWhere = i;
+				break;
+			}
+		}
+		if (toWhere == -1) {
+			throw new Exceptions.IncorrectIDAccount();
+		} else {
+			Account.accounts.get(toWhere).moneySumm += summ;
+			TransactionTransfer transaction = new TransactionTransfer(this, Account.accounts.get(toWhere), summ);
 		}
 	}
 

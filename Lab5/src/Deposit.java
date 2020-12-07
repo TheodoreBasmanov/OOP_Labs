@@ -26,62 +26,55 @@ public class Deposit extends Account {
 		period = Period.ofMonths(months).plusDays(days);
 	}
 
-	void setPercent(double percent) {
-		this.percent = percent;
-	}
-
 	public void withdraw(double summ)
 			throws Exceptions.CantBeNegative, Exceptions.NotAfterThePeriod, Exceptions.OverUnrealible {
 		checkSummReliable(summ);
 		checkSummNegative(summ);
-		if (!date.getDate().isBefore(creationDate.plus(period))) {
-			if (summ <= moneySumm) {
-				updateMoneySumm();
-				moneySumm -= summ;
-				Transaction transaction = new Transaction(this, null, summ);
-			} else {
-				throw new Exceptions.CantBeNegative();
-			}
-		} else {
+		if (date.getDate().isBefore(creationDate.plus(period))) {
 			throw new Exceptions.NotAfterThePeriod();
 		}
+		if (summ > moneySumm) {
+			throw new Exceptions.CantBeNegative();
+		}
+		updateMoneySumm();
+		moneySumm -= summ;
+		TransactionSingleOperation transaction = new TransactionSingleOperation(this, -summ);
 	}
 
 	public void putIn(double summ) {
 		checkSummNegative(summ);
 		updateMoneySumm();
 		moneySumm += summ;
-		Transaction transaction = new Transaction(null, this, summ);
+		TransactionSingleOperation transaction = new TransactionSingleOperation(this, summ);
 	}
 
 	public void transfer(double summ, int accountID) throws Exceptions.IncorrectIDAccount, Exceptions.CantBeNegative,
 			Exceptions.NotAfterThePeriod, Exceptions.OverUnrealible {
 		checkSummReliable(summ);
 		checkSummNegative(summ);
-		if (!date.getDate().isBefore(creationDate.plus(period))) {
-			if (summ <= moneySumm) {
-				updateMoneySumm();
-				moneySumm -= summ;
-				int toWhere = -1;
-				for (int i = 0; i < Account.accounts.size(); i++) {
-					if (Account.accounts.get(i).id == accountID) {
-						toWhere = i;
-						break;
-					}
-				}
-				if (toWhere == -1) {
-					throw new Exceptions.IncorrectIDAccount();
-				} else {
-					Account.accounts.get(toWhere).moneySumm += summ;
-					Transaction transaction = new Transaction(this, Account.accounts.get(toWhere), summ);
-				}
-			} else {
-				throw new Exceptions.CantBeNegative();
-			}
-		} else {
+		if (date.getDate().isBefore(creationDate.plus(period))) {
 			throw new Exceptions.NotAfterThePeriod();
 		}
+		if (summ > moneySumm) {
+			throw new Exceptions.CantBeNegative();
+		}
+		updateMoneySumm();
+		moneySumm -= summ;
+		int toWhere = -1;
+		for (int i = 0; i < Account.accounts.size(); i++) {
+			if (Account.accounts.get(i).id == accountID) {
+				toWhere = i;
+				break;
+			}
+		}
+		if (toWhere == -1) {
+			throw new Exceptions.IncorrectIDAccount();
+		} else {
+			Account.accounts.get(toWhere).moneySumm += summ;
+			TransactionTransfer transaction = new TransactionTransfer(this, Account.accounts.get(toWhere), summ);
+		}
 	}
+
 	protected void updateMoneySumm() {
 		long days = Duration.between(time, date.getDate()).toDays();
 		YearMonth month = YearMonth.of(date.getDate().getYear(), date.getDate().getMonthValue() - 1);
@@ -99,6 +92,5 @@ public class Deposit extends Account {
 			daysCounter = daysCounter - month.lengthOfMonth();
 		}
 	}
-
 
 }

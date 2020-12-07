@@ -21,9 +21,10 @@ public class DebitAccountTest {
 	public void testPutIn() {
 		TestDate date = new TestDate();
 		Bank bank = new Bank(100, null);
-		ClientBuilder newClient = new ClientBuilder(bank).withFullname("name", "surname").withAddress("address")
-				.withInNumber("IDNumber");
+		ClientBuilder newClient = new ClientBuilder().withFullname("name", "surname").withAddress("address")
+				.withIDNumber("IDNumber");
 		Client client = newClient.build();
+		bank.addClient(client);
 		DebitAccount account = new DebitAccount(client, date, 10);
 		account.putIn(100);
 		double expected = account.getBalance();
@@ -35,9 +36,10 @@ public class DebitAccountTest {
 	public void testWithraw() {
 		TestDate date = new TestDate();
 		Bank bank = new Bank(100, null);
-		ClientBuilder newClient = new ClientBuilder(bank).withFullname("name", "surname").withAddress("address")
-				.withInNumber("IDNumber");
+		ClientBuilder newClient = new ClientBuilder().withFullname("name", "surname").withAddress("address")
+				.withIDNumber("IDNumber");
 		Client client = newClient.build();
+		bank.addClient(client);
 		DebitAccount account = new DebitAccount(client, date, 10);
 		account.putIn(100);
 		account.withdraw(50);
@@ -50,9 +52,10 @@ public class DebitAccountTest {
 	public void testTransfer() {
 		TestDate date = new TestDate();
 		Bank bank = new Bank(100, null);
-		ClientBuilder newClient = new ClientBuilder(bank).withFullname("name", "surname").withAddress("address")
-				.withInNumber("IDNumber");
+		ClientBuilder newClient = new ClientBuilder().withFullname("name", "surname").withAddress("address")
+				.withIDNumber("IDNumber");
 		Client client = newClient.build();
+		bank.addClient(client);
 		DebitAccount account = new DebitAccount(client, date, 10);
 		DebitAccount account2 = new DebitAccount(client, date, 10);
 		account.putIn(100);
@@ -69,9 +72,10 @@ public class DebitAccountTest {
 	public void testCantGoNegativeException() {
 		TestDate date = new TestDate();
 		Bank bank = new Bank(100, null);
-		ClientBuilder newClient = new ClientBuilder(bank).withFullname("name", "surname").withAddress("address")
-				.withInNumber("IDNumber");
+		ClientBuilder newClient = new ClientBuilder().withFullname("name", "surname").withAddress("address")
+				.withIDNumber("IDNumber");
 		Client client = newClient.build();
+		bank.addClient(client);
 		DebitAccount account = new DebitAccount(client, date, 10);
 		account.putIn(100);
 		account.withdraw(500);
@@ -81,29 +85,31 @@ public class DebitAccountTest {
 	public void testUnreliableException() {
 		TestDate date = new TestDate();
 		Bank bank = new Bank(20, null);
-		ClientBuilder newClient = new ClientBuilder(bank).withFullname("name", "surname");
+		ClientBuilder newClient = new ClientBuilder().withFullname("name", "surname");
 		Client client = newClient.build();
+		bank.addClient(client);
 		DebitAccount account = new DebitAccount(client, date, 10);
 		account.putIn(100);
 		account.withdraw(50);
 	}
+
 	@Test
 	public void testPercent() {
 		TestDate date = new TestDate();
 		date.setDate(LocalDateTime.of(2020, 11, 1, 00, 00));
 		Bank bank = new Bank(100, null);
-		ClientBuilder newClient = new ClientBuilder(bank).withFullname("name", "surname").withAddress("address")
-				.withInNumber("IDNumber");
+		ClientBuilder newClient = new ClientBuilder().withFullname("name", "surname").withAddress("address")
+				.withIDNumber("IDNumber");
 		Client client = newClient.build();
+		bank.addClient(client);
 		DebitAccount account = new DebitAccount(client, date, 10);
 		account.putIn(100);
-		((TestDate)account.date).setDate(LocalDateTime.of(2021, 05, 1, 00, 00));
+		((TestDate) account.date).setDate(LocalDateTime.of(2021, 05, 1, 00, 00));
 		account.putIn(100);
-		((TestDate)account.date).setDate(LocalDateTime.of(2021, 11, 1, 00, 00));
+		((TestDate) account.date).setDate(LocalDateTime.of(2021, 11, 1, 00, 00));
 		int expected = (int) account.getBalance();
 		int actual = 215;
 		Assert.assertEquals(expected == actual, true);
 	}
-	
 
 }

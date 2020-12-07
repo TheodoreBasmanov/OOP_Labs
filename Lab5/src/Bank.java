@@ -23,19 +23,17 @@ public class Bank {
 		this.depositPercents = depositPercents;
 	}
 
-	void addClient(ClientBuilder newClient) throws Exceptions.WrongBank {
-		if (!newClient.bank.equals(this)) {
-			throw new Exceptions.WrongBank();
-		}
-		clients.add(newClient.build());
+	void addClient(Client client) {
+		client.setBank(this);
+		clients.add(client);
 	}
 
 	void makeClientReliable(int id, String address, String IDNumber)
 			throws Exceptions.AlreadyReliable, Exceptions.IncorrectIDClient {
 		for (int i = 0; i < clients.size(); i++) {
 			if (clients.get(i).id == id) {
-				clients.get(i).makeReliable(address, IDNumber);
-				break;
+				clients.set(i, new ClientBuilder(clients.get(i)).withAddress(address).withIDNumber(IDNumber).build());
+				return;
 			}
 		}
 		throw new Exceptions.IncorrectIDClient();
@@ -44,8 +42,8 @@ public class Bank {
 	void setClientAddress(int id, String address) throws Exceptions.IncorrectIDClient {
 		for (int i = 0; i < clients.size(); i++) {
 			if (clients.get(i).id == id) {
-				clients.get(i).setAddress(address);
-				break;
+				clients.set(i, new ClientBuilder(clients.get(i)).withAddress(address).build());
+				return;
 			}
 		}
 		throw new Exceptions.IncorrectIDClient();
@@ -54,8 +52,8 @@ public class Bank {
 	void setClientIDNumber(int id, String IDNumber) throws Exceptions.IncorrectIDClient {
 		for (int i = 0; i < clients.size(); i++) {
 			if (clients.get(i).id == id) {
-				clients.get(i).setIDNumber(IDNumber);
-				break;
+				clients.set(i, new ClientBuilder(clients.get(i)).withIDNumber(IDNumber).build());
+				return;
 			}
 		}
 		throw new Exceptions.IncorrectIDClient();
@@ -70,10 +68,29 @@ public class Bank {
 			if (clients.get(i).id == clientID) {
 				DebitAccount newAccount = new DebitAccount(clients.get(i), date, percent);
 				accountIDs.add(newAccount.id);
-				break;
+				clients.get(i).addAcctount(newAccount);
+				return;
 			}
 		}
 		throw new Exceptions.IncorrectIDClient();
+	}
+
+	double findDepositPercent(double initialSumm) throws Exceptions.WrongDepositPercents, Exceptions.NegativePercent {
+		double percent = -1;
+		for (int j = 0; j < depositPercents.size(); j++) {
+			if (depositPercents.get(j).from <= initialSumm && initialSumm < depositPercents.get(j).to) {
+				percent = depositPercents.get(j).percent;
+				break;
+			}
+		}
+
+		if (percent == -1) {
+			throw new Exceptions.WrongDepositPercents();
+		}
+		if (percent < 0) {
+			throw new Exceptions.NegativePercent();
+		}
+		return percent;
 	}
 
 	void createDeposit(int clientID, DateGiver date, int months, int days, double initialSumm)
@@ -88,21 +105,11 @@ public class Bank {
 		double percent = -1;
 		for (int i = 0; i < clients.size(); i++) {
 			if (clients.get(i).id == clientID) {
-				for (int j = 0; j < depositPercents.size(); j++) {
-					if (depositPercents.get(j).from <= initialSumm && initialSumm < depositPercents.get(j).to) {
-						percent = depositPercents.get(j).percent;
-						break;
-					}
-				}
-				if (percent == -1) {
-					throw new Exceptions.WrongDepositPercents();
-				}
-				if (percent < 0) {
-					throw new Exceptions.NegativePercent();
-				}
+				percent = findDepositPercent(initialSumm);
 				Deposit newAccount = new Deposit(clients.get(i), date, months, days, percent, initialSumm);
 				accountIDs.add(newAccount.id);
-				break;
+				clients.get(i).addAcctount(newAccount);
+				return;
 			}
 		}
 		throw new Exceptions.IncorrectIDClient();
@@ -120,7 +127,8 @@ public class Bank {
 			if (clients.get(i).id == clientID) {
 				CreditAccount newAccount = new CreditAccount(clients.get(i), date, comission, limit);
 				accountIDs.add(newAccount.id);
-				break;
+				clients.get(i).addAcctount(newAccount);
+				return;
 			}
 		}
 		throw new Exceptions.IncorrectIDClient();

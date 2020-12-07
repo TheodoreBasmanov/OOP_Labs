@@ -11,53 +11,37 @@ public class Client {
 	Bank bank;
 	ArrayList<Integer> accountIDs;
 
-	Client(Bank bank) {
+	Client() {
 		id = ID;
 		ID++;
 		accountIDs = new ArrayList<Integer>();
 		isReliable = false;
+	}
+
+	void setBank(Bank bank) {
 		this.bank = bank;
-	}
-
-	void setName(String name) {
-		this.name = name;
-	}
-
-	void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	void setFullName(String name, String surname) {
-		this.setName(name);
-		this.setSurname(surname);
 	}
 
 	void makeReliable(String address, String IDNumber) throws Exceptions.AlreadyReliable {
 		if (isReliable) {
 			throw new Exceptions.AlreadyReliable();
 		}
-		this.setAddress(address);
-		this.setIDNumber(IDNumber);
-		isReliable = true;
-	}
-
-	void setAddress(String address) {
 		this.address = address;
-		if (this.IDNumber != null) {
-			isReliable = true;
-		}
-	}
-
-	void setIDNumber(String IDNumber) {
 		this.IDNumber = IDNumber;
-		if (this.address != null) {
-			isReliable = true;
-		}
+		isReliable = true;
 	}
 
 	void addAcctount(Account account) {
 		accountIDs.add(account.id);
 		account.client = this;
+	}
+
+	void checkReliability() {
+		if (address != null && IDNumber != null) {
+			isReliable = true;
+		} else {
+			isReliable = false;
+		}
 	}
 
 	String whyUnreliable() {

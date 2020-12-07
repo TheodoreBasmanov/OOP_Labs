@@ -149,6 +149,7 @@ public class Exceptions {
 			this("Your percents for deposit accounts seem to be set so that the initial summ of money doesn't feet into any of the interval.");
 		}
 	}
+
 	public static class NegativeMoneySumm extends RuntimeException {
 		/**
 		 * 
@@ -163,6 +164,7 @@ public class Exceptions {
 			this("The summ of money you are operating with can't be negative.");
 		}
 	}
+
 	public static class NegativePercent extends RuntimeException {
 		/**
 		 * 
@@ -177,6 +179,7 @@ public class Exceptions {
 			this("The percent for the account can't be negative.");
 		}
 	}
+
 	public static class NegativeTime extends RuntimeException {
 		/**
 		 * 
@@ -191,7 +194,7 @@ public class Exceptions {
 			this("The time period you are operating with can't be negative.");
 		}
 	}
-	
+
 	public static class NegativeComission extends RuntimeException {
 		/**
 		 * 
@@ -206,6 +209,7 @@ public class Exceptions {
 			this("The comission for a credit account can't be negative.");
 		}
 	}
+
 	public static class NegativeLimit extends RuntimeException {
 		/**
 		 * 
@@ -220,5 +224,20 @@ public class Exceptions {
 			this("The limit for a credit account can't be negative.");
 		}
 	}
-	
+
+	public static class AlreadyCanceled extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public AlreadyCanceled(String errorMessage) {
+			super(errorMessage);
+		}
+
+		public AlreadyCanceled() {
+			this("The transactions you are trying to cancel was already cancelled.");
+		}
+	}
+
 }

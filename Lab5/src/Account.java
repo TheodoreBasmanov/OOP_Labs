@@ -1,7 +1,7 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Account implements IAccount {
+public abstract class Account implements IAccount {
 	static ArrayList<Account> accounts = new ArrayList<Account>();
 	private static int ID = 1;
 	int id;
@@ -11,6 +11,7 @@ public class Account implements IAccount {
 	protected DateGiver date;
 	protected LocalDateTime time;
 	protected int daysCounter = 0;
+
 	Account(Client client, DateGiver date) {
 		id = ID;
 		ID++;
@@ -33,21 +34,15 @@ public class Account implements IAccount {
 	}
 
 	@Override
-	public void withdraw(double summ) {
-
-	}
+	public abstract void withdraw(double summ);
 
 	@Override
-	public void putIn(double summ) {
-
-	}
+	public abstract void putIn(double summ);
 
 	@Override
-	public void transfer(double summ, int accountID) {
-	}
+	public abstract void transfer(double summ, int accountID);
 
-	protected void updateMoneySumm() {
-	}
+	protected abstract void updateMoneySumm();
 
 	@Override
 	public boolean equals(Object o) {

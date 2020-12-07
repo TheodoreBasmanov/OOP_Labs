@@ -19,9 +19,10 @@ public class TransactionTest {
 	public void testUndo() {
 		TestDate date = new TestDate();
 		Bank bank = new Bank(100, null);
-		ClientBuilder newClient = new ClientBuilder(bank).withFullname("name", "surname").withAddress("address")
-				.withInNumber("IDNumber");
+		ClientBuilder newClient = new ClientBuilder().withFullname("name", "surname").withAddress("address")
+				.withIDNumber("IDNumber");
 		Client client = newClient.build();
+		bank.addClient(client);
 		DebitAccount account = new DebitAccount(client, date, 10);
 		DebitAccount account2 = new DebitAccount(client, date, 10);
 		account.putIn(100);
