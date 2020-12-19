@@ -1,7 +1,5 @@
 package Data;
 
-import Business.EmployeeBusiness;
-
 import java.util.ArrayList;
 
 public class EmployeeData {
@@ -15,6 +13,14 @@ public class EmployeeData {
 		this.name = name;
 		EmployeeData.employees.add(this);
 	}
+	public static EmployeeData get(int id){
+		for (int i = 0; i < employees.size(); i++) {
+			if (employees.get(i).id == id) {
+				return( employees.get(i));
+			}
+		}
+		return null;
+	}
 
 	public static void makeTeamLead(int id) {
 		for (int i = 0; i < employees.size(); i++) {
@@ -23,6 +29,7 @@ public class EmployeeData {
 			}
 		}
 	}
+	
 
 	@Override
 	public boolean equals(Object o) {
