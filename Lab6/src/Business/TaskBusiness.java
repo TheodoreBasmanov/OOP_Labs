@@ -1,5 +1,6 @@
 package Business;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -43,6 +44,7 @@ public class TaskBusiness {
 		lastChangeTime = time.getDate();
 		TaskManagerBusiness.tasks.add(this);
 		journal.add(new TaskChangeBusiness(doer, time));
+		TaskDataAdapter.adapt(this);
 	}
 
 	void addCommentary(String comment, EmployeeBusiness doer) {
@@ -56,7 +58,6 @@ public class TaskBusiness {
 		this.employee = employee;
 		lastChangeTime = time.getDate();
 		TaskData.assignEmployee(this.id, employee.id);
-
 	}
 
 	void changeState(EmployeeBusiness doer) {
@@ -67,6 +68,39 @@ public class TaskBusiness {
 	boolean didEmployeeChange(EmployeeBusiness doer) {
 		for (int i = 0; i < journal.size(); i++) {
 			if (journal.get(i).employee.equals(doer)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	boolean isResolved() {
+		return state.equals(TaskBusiness.State.Resolved);
+	}
+
+	TaskChangeBusiness getLastStateChange() {
+		for (int i = journal.size() - 1; i >= 0; i++) {
+			if (journal.get(i).type.equals(TaskChangeBusiness.Type.StateChange)) {
+				return journal.get(i);
+			}
+		}
+		return null;
+	}
+
+	ArrayList<TaskChangeBusiness> getWhatsChangedInADay(LocalDate day) {
+		ArrayList<TaskChangeBusiness> result = new ArrayList<TaskChangeBusiness>();
+		for (int i = 0; i < journal.size(); i++) {
+			if (journal.get(i).changeTime.isAfter(day.atStartOfDay())
+					&& journal.get(i).changeTime.isBefore(day.plusDays(1).atStartOfDay())) {
+				result.add(journal.get(i));
+			}
+		}
+		return result;
+	}
+
+	static boolean taskIsOnTheList(ArrayList<TaskBusiness> list, TaskBusiness task) {
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).id == task.id) {
 				return true;
 			}
 		}

@@ -1,5 +1,6 @@
 package Business;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class TaskManagerBusiness {
 				tasks.get(i).assignEmployee(employee, doer);
 			}
 		}
+
 	}
 
 	public static TaskBusiness get(int id) {
@@ -114,6 +116,31 @@ public class TaskManagerBusiness {
 		for (int i = 0; i < tasks.size(); i++) {
 			if (tasks.get(i).didEmployeeChange(employee)) {
 				result.add(tasks.get(i));
+			}
+		}
+		return result;
+	}
+
+	public static ArrayList<TaskBusiness> getWhatsDoneByEmployeeInADay(EmployeeBusiness employee, LocalDate day) {
+		ArrayList<TaskBusiness> result = new ArrayList<TaskBusiness>();
+		ArrayList<TaskBusiness> employeesTasks = getAssignedToEmployee(employee);
+		for (int i = 0; i < employeesTasks.size(); i++) {
+			TaskChangeBusiness stateChange = employeesTasks.get(i).getLastStateChange();
+			if (employeesTasks.get(i).isResolved() && stateChange.changeTime.isAfter(day.atStartOfDay())
+					&& stateChange.changeTime.isBefore(day.plusDays(1).atStartOfDay())) {
+				result.add(employeesTasks.get(i));
+			}
+		}
+		return result;
+	}
+
+	public static ArrayList<TaskBusiness> getWhatsChangedByEmployeeInADay(EmployeeBusiness employee, LocalDate day) {
+		ArrayList<TaskBusiness> result = new ArrayList<TaskBusiness>();
+		ArrayList<TaskBusiness> employeesTasks = getAssignedToEmployee(employee);
+		for (int i = 0; i < employeesTasks.size(); i++) {
+			if (employeesTasks.get(i).lastChangeTime.isAfter(day.atStartOfDay())
+					&& employeesTasks.get(i).lastChangeTime.isBefore(day.plusDays(1).atStartOfDay())) {
+				result.add(employeesTasks.get(i));
 			}
 		}
 		return result;

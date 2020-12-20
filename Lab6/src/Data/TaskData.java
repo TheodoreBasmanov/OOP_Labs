@@ -25,4 +25,13 @@ public class TaskData {
 			}
 		}
 	}
+
+	public static TaskData get(int id) {
+		for (int i = 0; i < tasks.size(); i++) {
+			if (tasks.get(i).id == id) {
+				return tasks.get(i);
+			}
+		}
+		return null;
+	}
 }

@@ -73,8 +73,9 @@ public class EmployeeBusiness {
 	public static void updateHierarchy() {
 		for (int i = 0; i < employees.size(); i++) {
 			if (employees.get(i).boss != null) {
-				if (EmployeePresentation.employees.get(i).boss == null || EmployeePresentation.employees.get(i).boss.id != employees.get(i).boss.id) {
-						EmployeePresentation.employees.get(i).setBoss(employees.get(i).boss.id);
+				if (EmployeePresentation.employees.get(i).boss == null
+						|| EmployeePresentation.employees.get(i).boss.id != employees.get(i).boss.id) {
+					EmployeePresentation.employees.get(i).setBoss(employees.get(i).boss.id);
 				}
 			}
 			if (employees.get(i).isLead) {
@@ -103,6 +104,15 @@ public class EmployeeBusiness {
 			}
 		}
 		return false;
+	}
+
+	public static EmployeeBusiness getTeamLead() {
+		for (int i = 0; i < employees.size(); i++) {
+			if (employees.get(i).isTeamLead) {
+				return employees.get(i);
+			}
+		}
+		return null;
 	}
 
 	public static class EmployeeDataAdapter {
