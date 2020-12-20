@@ -29,5 +29,19 @@ public class ExceptionsBusiness {
 			this("You can't make this employee a team lead, because team lead already exists.");
 		}
 	}
+	public static class CantChangeState extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public CantChangeState(String errorMessage) {
+			super(errorMessage);
+		}
+
+		public CantChangeState() {
+			this("You can't change state of the task - it's already resolved.");
+		}
+	}
 }
 
