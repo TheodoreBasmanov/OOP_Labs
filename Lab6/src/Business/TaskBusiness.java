@@ -6,8 +6,11 @@ import java.util.ArrayList;
 
 import Data.EmployeeData;
 import Data.TaskData;
+import Presentation.EmployeePresentation;
+import Presentation.TaskPresentation;
 
 public class TaskBusiness {
+	public static ArrayList<TaskBusiness> tasks = new ArrayList<TaskBusiness>();
 	private static int ID = 1;
 	public int id;
 	public String title;
@@ -45,6 +48,7 @@ public class TaskBusiness {
 		TaskManagerBusiness.tasks.add(this);
 		journal.add(new TaskChangeBusiness(doer, time));
 		TaskDataAdapter.adapt(this);
+		TaskPresentationAdapter.adapt(this);
 	}
 
 	void addCommentary(String comment, EmployeeBusiness doer) {
@@ -98,6 +102,17 @@ public class TaskBusiness {
 		return result;
 	}
 
+	ArrayList<TaskChangeBusiness> getWhatsChangedInASprit(LocalDate startDay, LocalDate endDay) {
+		ArrayList<TaskChangeBusiness> result = new ArrayList<TaskChangeBusiness>();
+		for (int i = 0; i < journal.size(); i++) {
+			if (journal.get(i).changeTime.isAfter(startDay.atStartOfDay())
+					&& journal.get(i).changeTime.isBefore(endDay.plusDays(1).atStartOfDay())) {
+				result.add(journal.get(i));
+			}
+		}
+		return result;
+	}
+
 	static boolean taskIsOnTheList(ArrayList<TaskBusiness> list, TaskBusiness task) {
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).id == task.id) {
@@ -107,11 +122,64 @@ public class TaskBusiness {
 		return false;
 	}
 
+	public static void updatePresentationTask(int id) {
+		TaskBusiness businessTask = null;
+		for (int i = 0; i < tasks.size(); i++) {
+			if (tasks.get(i).id == id) {
+				businessTask = tasks.get(i);
+				break;
+			}
+		}
+		for (int i = 0; i < TaskPresentation.tasks.size(); i++) {
+			if (TaskPresentation.tasks.get(i).id == id) {
+				if (businessTask.employee.id != TaskPresentation.tasks.get(i).employee.id) {
+					TaskPresentation.tasks.get(i).employee = EmployeePresentation.get(businessTask.employee.id);
+				}
+				TaskPresentation.tasks.get(i).lastChangeTime = businessTask.lastChangeTime;
+				if (businessTask.commentaries.size() != TaskPresentation.tasks.get(i).commentaries.size()) {
+					for (int j = TaskPresentation.tasks.get(i).commentaries.size(); j < businessTask.commentaries
+							.size(); j++) {
+						TaskPresentation.tasks.get(i).commentaries.add(businessTask.commentaries.get(j));
+					}
+				}
+			}
+		}
+	}
+
+	public static void updatePresentationTaskJournal(int id) {
+		TaskBusiness businessTask = null;
+		for (int i = 0; i < tasks.size(); i++) {
+			if (tasks.get(i).id == id) {
+				businessTask = tasks.get(i);
+				break;
+			}
+		}
+		for (int i = 0; i < TaskPresentation.tasks.size(); i++) {
+			if (TaskPresentation.tasks.get(i).id == id) {
+				if (TaskPresentation.tasks.get(i).journal.size() != businessTask.journal.size()) {
+					for (int j = TaskPresentation.tasks.get(i).journal.size(); j < businessTask.journal.size(); j++) {
+						TaskPresentation.tasks.get(i).journal.add(
+								TaskChangeBusiness.TaskChangePresentationAdapter.adapt(businessTask.journal.get(j)));
+					}
+				}
+			}
+		}
+	}
+
 	public static class TaskDataAdapter {
 		public static TaskData adapt(TaskBusiness businessTask) {
 			EmployeeData employee = EmployeeData.get(businessTask.employee.id);
 			TaskData dataTask = new TaskData(businessTask.title, businessTask.description, businessTask.id, employee);
 			return dataTask;
+		}
+	}
+
+	public static class TaskPresentationAdapter {
+		public static TaskPresentation adapt(TaskBusiness businessTask) {
+			EmployeePresentation employee = EmployeePresentation.get(businessTask.employee.id);
+			TaskPresentation presentationTask = new TaskPresentation(businessTask.id, businessTask.title,
+					businessTask.description, employee, businessTask.creationTime);
+			return presentationTask;
 		}
 	}
 }

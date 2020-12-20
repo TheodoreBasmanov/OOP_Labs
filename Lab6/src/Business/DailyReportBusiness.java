@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import Data.DailyReportData;
 import Data.EmployeeData;
 import Data.TaskData;
+import Presentation.ChangedTaskPresentation;
+import Presentation.DailyReportPresentation;
+import Presentation.EmployeePresentation;
+import Presentation.TaskPresentation;
 
 public class DailyReportBusiness extends ReportBusiness {
 	static int ID = 1;
@@ -19,6 +23,7 @@ public class DailyReportBusiness extends ReportBusiness {
 		date = time.getDate().toLocalDate();
 		reportsForSprint.add(this);
 		DailyReportDataAdapter.adapt(this);
+		DailyReportPresentationAdapter.adapt(this);
 	}
 
 	@Override
@@ -28,6 +33,7 @@ public class DailyReportBusiness extends ReportBusiness {
 		resolvedTasks.addAll(TaskManagerBusiness.getWhatsDoneByEmployeeInADay(employee, date));
 		changedTasks.addAll(TaskManagerBusiness.getWhatsChangedByEmployeeInADay(employee, date));
 		updateDataReport();
+		updatePresentationReport();
 	}
 
 	@Override
@@ -37,6 +43,7 @@ public class DailyReportBusiness extends ReportBusiness {
 		resolvedTasks.addAll(TaskManagerBusiness.getWhatsDoneByEmployeeInADay(employee, date));
 		changedTasks.addAll(TaskManagerBusiness.getWhatsChangedByEmployeeInADay(employee, date));
 		updateDataReport();
+		updatePresentationReport();
 	}
 
 	@Override
@@ -54,6 +61,7 @@ public class DailyReportBusiness extends ReportBusiness {
 		}
 		resolvedTasks.add(task);
 		updateDataReport();
+		updatePresentationReport();
 	}
 
 	@Override
@@ -67,6 +75,7 @@ public class DailyReportBusiness extends ReportBusiness {
 		}
 		changedTasks.add(task);
 		updateDataReport();
+		updatePresentationReport();
 	}
 
 	static void endSprint() {
@@ -81,11 +90,20 @@ public class DailyReportBusiness extends ReportBusiness {
 		}
 	}
 
+	public static class DailyReportPresentationAdapter {
+		public static DailyReportPresentation adapt(DailyReportBusiness businessDailyReport) {
+			EmployeePresentation employee = EmployeePresentation.get(businessDailyReport.employee.id);
+			DailyReportPresentation presentationDailyReport = new DailyReportPresentation(businessDailyReport.id,
+					employee, businessDailyReport.date);
+			return presentationDailyReport;
+		}
+	}
+
 	public void updateDataReport() {
 		int num = 0;
 		for (int i = 0; i < DailyReportData.dailyReports.size(); i++) {
 			if (DailyReportData.dailyReports.get(i).id == id) {
-				num = 0;
+				num = i;
 			}
 		}
 		for (int i = 0; i < resolvedTasks.size(); i++) {
@@ -108,6 +126,45 @@ public class DailyReportBusiness extends ReportBusiness {
 			}
 			if (!taskIsAlreadyIn) {
 				DailyReportData.dailyReports.get(num).changedTasks.add(TaskData.get(changedTasks.get(i).id));
+			}
+		}
+	}
+
+	public void updatePresentationReport() {
+		int num = 0;
+		for (int i = 0; i < DailyReportPresentation.dailyReports.size(); i++) {
+			if (DailyReportPresentation.dailyReports.get(i).id == id) {
+				num = i;
+			}
+		}
+		for (int i = 0; i < resolvedTasks.size(); i++) {
+			boolean taskIsAlreadyIn = false;
+			for (int j = 0; j < DailyReportPresentation.dailyReports.get(num).resolvedTasks.size(); j++) {
+				if (resolvedTasks.get(i).id == DailyReportPresentation.dailyReports.get(num).resolvedTasks.get(j).id) {
+					taskIsAlreadyIn = true;
+				}
+			}
+			if (!taskIsAlreadyIn) {
+				DailyReportPresentation.dailyReports.get(num).resolvedTasks
+						.add(TaskPresentation.get(resolvedTasks.get(i).id));
+			}
+		}
+		for (int i = 0; i < changedTasks.size(); i++) {
+			boolean taskIsAlreadyIn = false;
+			for (int j = 0; j < DailyReportPresentation.dailyReports.get(num).changedTasks.size(); j++) {
+				if (changedTasks
+						.get(i).id == DailyReportPresentation.dailyReports.get(num).changedTasks.get(j).task.id) {
+					taskIsAlreadyIn = true;
+				}
+			}
+			if (!taskIsAlreadyIn) {
+				ChangedTaskPresentation task = new ChangedTaskPresentation(
+						TaskPresentation.get(changedTasks.get(i).id));
+				ArrayList<TaskChangeBusiness> changes = changedTasks.get(i).getWhatsChangedInADay(date);
+				for (int k = 0; k < changes.size(); k++) {
+					task.changes.add(TaskChangeBusiness.TaskChangePresentationAdapter.adapt(changes.get(i)));
+				}
+				DailyReportPresentation.dailyReports.get(num).changedTasks.add(task);
 			}
 		}
 	}
