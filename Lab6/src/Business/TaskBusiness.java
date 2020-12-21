@@ -13,7 +13,7 @@ public class TaskBusiness {
 	// public static ArrayList<TaskBusiness> tasks = new
 	// ArrayList<TaskBusiness>();
 	private static int ID = 1;
-	public int id;
+	int id;
 	public String title;
 	public String description;
 	public EmployeeBusiness employee;
@@ -51,6 +51,10 @@ public class TaskBusiness {
 		journal.add(new TaskChangeBusiness(doer, time));
 		TaskDataAdapter.adapt(this);
 		TaskPresentationAdapter.adapt(this);
+	}
+
+	public int getID() {
+		return id;
 	}
 
 	public void addCommentary(String comment, EmployeeBusiness doer) {

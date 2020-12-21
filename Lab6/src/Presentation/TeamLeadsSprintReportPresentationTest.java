@@ -57,13 +57,20 @@ public class TeamLeadsSprintReportPresentationTest {
 		time.setDate(LocalDateTime.of(2020, 12, 22, 00, 00));
 		DailyReportBusiness report1 = new DailyReportBusiness(employee1, time);
 		report1.createReport();
-		SprintReportBusiness sprReport = new SprintReportBusiness(employee, time, LocalDateTime.of(2020, 12, 20, 00, 00).toLocalDate(), LocalDateTime.of(2020, 12, 25, 00, 00).toLocalDate());
+		SprintReportBusiness sprReport = new SprintReportBusiness(employee, time,
+				LocalDateTime.of(2020, 12, 20, 00, 00).toLocalDate(),
+				LocalDateTime.of(2020, 12, 25, 00, 00).toLocalDate());
 		sprReport.createReport();
-		SprintReportBusiness sprReport1 = new SprintReportBusiness(employee1, time, LocalDateTime.of(2020, 12, 20, 00, 00).toLocalDate(), LocalDateTime.of(2020, 12, 25, 00, 00).toLocalDate());
+		SprintReportBusiness sprReport1 = new SprintReportBusiness(employee1, time,
+				LocalDateTime.of(2020, 12, 20, 00, 00).toLocalDate(),
+				LocalDateTime.of(2020, 12, 25, 00, 00).toLocalDate());
 		sprReport1.createReport();
-		TeamLeadsSprintReportBusiness tmlSprReport = new TeamLeadsSprintReportBusiness(employee, time, LocalDateTime.of(2020, 12, 20, 00, 00).toLocalDate(), LocalDateTime.of(2020, 12, 25, 00, 00).toLocalDate());
+		TeamLeadsSprintReportBusiness tmlSprReport = new TeamLeadsSprintReportBusiness(employee, time,
+				LocalDateTime.of(2020, 12, 20, 00, 00).toLocalDate(),
+				LocalDateTime.of(2020, 12, 25, 00, 00).toLocalDate());
 		tmlSprReport.createReport();
-		TeamLeadsSprintReportPresentation tmlSprReportPresent = TeamLeadsSprintReportPresentation.get(tmlSprReport.id);
+		TeamLeadsSprintReportPresentation tmlSprReportPresent = TeamLeadsSprintReportPresentation
+				.get(tmlSprReport.getId());
 		System.out.println(tmlSprReportPresent.show());
 	}
 

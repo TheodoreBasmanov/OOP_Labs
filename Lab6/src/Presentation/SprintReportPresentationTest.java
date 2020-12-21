@@ -54,9 +54,11 @@ public class SprintReportPresentationTest {
 		time.setDate(LocalDateTime.of(2020, 12, 22, 00, 00));
 		DailyReportBusiness report1 = new DailyReportBusiness(employee, time);
 		report1.createReport();
-		SprintReportBusiness sprReport = new SprintReportBusiness(employee, time, LocalDateTime.of(2020, 12, 20, 00, 00).toLocalDate(), LocalDateTime.of(2020, 12, 25, 00, 00).toLocalDate());
+		SprintReportBusiness sprReport = new SprintReportBusiness(employee, time,
+				LocalDateTime.of(2020, 12, 20, 00, 00).toLocalDate(),
+				LocalDateTime.of(2020, 12, 25, 00, 00).toLocalDate());
 		sprReport.createReport();
-		SprintReportPresentation sprReportPresent = SprintReportPresentation.get(sprReport.id);
+		SprintReportPresentation sprReportPresent = SprintReportPresentation.get(sprReport.getId());
 		System.out.println(sprReportPresent.show());
 	}
 

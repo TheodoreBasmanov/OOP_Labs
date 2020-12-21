@@ -30,9 +30,10 @@ public class TaskPresentationTest {
 		TaskBusiness task = new TaskBusiness("Task1", "Some description", employee, time, employee);
 		task.addCommentary("Some commentary", employee);
 		task.assignEmployee(employee2, employee);
-		TaskPresentation taskPres = TaskPresentation.get(task.id);
+		TaskPresentation taskPres = TaskPresentation.get(task.getID());
 		System.out.println(taskPres.show());
 	}
+
 	@Test
 	public void testShowJournal() {
 		EmployeeBusiness.employees.clear();
@@ -43,7 +44,7 @@ public class TaskPresentationTest {
 		TaskBusiness task = new TaskBusiness("Task1", "Some description", employee, time, employee);
 		task.addCommentary("Some commentary", employee);
 		task.assignEmployee(employee2, employee);
-		TaskPresentation taskPres = TaskPresentation.get(task.id);
+		TaskPresentation taskPres = TaskPresentation.get(task.getID());
 		System.out.println(taskPres.showJournal());
 	}
 

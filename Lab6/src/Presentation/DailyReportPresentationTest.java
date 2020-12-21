@@ -41,7 +41,7 @@ public class DailyReportPresentationTest {
 		time.setDate(LocalDateTime.of(2020, 12, 21, 00, 00));
 		DailyReportBusiness report = new DailyReportBusiness(employee, time);
 		report.createReport();
-		DailyReportPresentation reportPres = DailyReportPresentation.get(report.id);
+		DailyReportPresentation reportPres = DailyReportPresentation.get(report.getId());
 		System.out.println(reportPres.show());
 	}
 
