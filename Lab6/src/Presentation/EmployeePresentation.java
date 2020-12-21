@@ -7,7 +7,7 @@ import Business.EmployeeBusiness;
 public class EmployeePresentation {
 
 	public static ArrayList<EmployeePresentation> employees = new ArrayList<EmployeePresentation>();
-	public int id;
+	private int id;
 	public String name;
 	public EmployeePresentation boss;
 	public boolean isTeamLead;
@@ -19,10 +19,15 @@ public class EmployeePresentation {
 		this.name = name;
 		EmployeePresentation.employees.add(this);
 	}
-	public static EmployeePresentation get(int id){
+
+	public int getId() {
+		return id;
+	}
+
+	public static EmployeePresentation get(int id) {
 		for (int i = 0; i < employees.size(); i++) {
 			if (employees.get(i).id == id) {
-				return( employees.get(i));
+				return (employees.get(i));
 			}
 		}
 		return null;
@@ -35,7 +40,8 @@ public class EmployeePresentation {
 			}
 		}
 	}
-	public void addSubordinate(int id){
+
+	public void addSubordinate(int id) {
 		for (int i = 0; i < employees.size(); i++) {
 			if (employees.get(i).id == id) {
 				subordinates.add(employees.get(i));

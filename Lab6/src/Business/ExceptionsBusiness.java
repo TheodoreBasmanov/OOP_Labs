@@ -30,6 +30,21 @@ public class ExceptionsBusiness {
 			this("You can't make this employee a team lead, because team lead already exists.");
 		}
 	}
+	
+	public static class CantGiveTeamLeadABoss extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public CantGiveTeamLeadABoss(String errorMessage) {
+			super(errorMessage);
+		}
+
+		public CantGiveTeamLeadABoss() {
+			this("You can't give team lead a boss.");
+		}
+	}
 
 	public static class CantChangeState extends RuntimeException {
 		/**

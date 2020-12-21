@@ -34,7 +34,7 @@ public class EmployeePresentationTest {
 		EmployeeBusiness employee3 = new EmployeeBusiness("Damien Firel");
 		employee3.setBoss(lead1);
 		EmployeePresentation expected = EmployeePresentation.getTeamLead();
-		EmployeePresentation actual = EmployeePresentation.get(teamLead.id);
+		EmployeePresentation actual = EmployeePresentation.get(teamLead.getId());
 		Assert.assertEquals(expected, actual);
 	}
 	@Test

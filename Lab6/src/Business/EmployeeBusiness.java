@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class EmployeeBusiness {
 	public static ArrayList<EmployeeBusiness> employees = new ArrayList<EmployeeBusiness>();
 	private static int ID = 1;
-	public int id;
+	private int id;
 	public String name;
 	public EmployeeBusiness boss;
 	public boolean isTeamLead;
@@ -25,9 +25,17 @@ public class EmployeeBusiness {
 		EmployeePresentationAdapter.adapt(this);
 	}
 
-	public void makeTeamLead() throws ExceptionsBusiness.CantMakeTowTeamLeads {
+	public int getId() {
+		return id;
+	}
+
+	public void makeTeamLead()
+			throws ExceptionsBusiness.CantMakeTowTeamLeads, ExceptionsBusiness.CantGiveTeamLeadABoss {
 		if (teamLeadExists) {
 			throw new ExceptionsBusiness.CantMakeTowTeamLeads();
+		}
+		if (isTeamLead) {
+			throw new ExceptionsBusiness.CantGiveTeamLeadABoss();
 		}
 		this.isTeamLead = true;
 		teamLeadExists = true;
@@ -74,7 +82,7 @@ public class EmployeeBusiness {
 		for (int i = 0; i < employees.size(); i++) {
 			if (employees.get(i).boss != null) {
 				if (EmployeePresentation.employees.get(i).boss == null
-						|| EmployeePresentation.employees.get(i).boss.id != employees.get(i).boss.id) {
+						|| EmployeePresentation.employees.get(i).boss.getId() != employees.get(i).boss.id) {
 					EmployeePresentation.employees.get(i).setBoss(employees.get(i).boss.id);
 				}
 			}
@@ -99,7 +107,7 @@ public class EmployeeBusiness {
 
 	private static boolean findSub(ArrayList<Presentation.EmployeePresentation> subs, int id) {
 		for (int i = 0; i < subs.size(); i++) {
-			if (subs.get(i).id == id) {
+			if (subs.get(i).getId() == id) {
 				return true;
 			}
 		}

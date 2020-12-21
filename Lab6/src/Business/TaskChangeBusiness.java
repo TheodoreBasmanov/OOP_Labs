@@ -34,7 +34,7 @@ public class TaskChangeBusiness {
 
 	public static class TaskChangePresentationAdapter {
 		public static TaskChangePresentation adapt(TaskChangeBusiness businessTaskChange) {
-			EmployeePresentation employee = EmployeePresentation.get(businessTaskChange.employee.id);
+			EmployeePresentation employee = EmployeePresentation.get(businessTaskChange.employee.getId());
 			TaskChangePresentation presentationTaskChange = new TaskChangePresentation(employee,
 					businessTaskChange.changeTime, businessTaskChange.type.toString());
 			presentationTaskChange.additionalInfo.addAll(businessTaskChange.giveInfo());

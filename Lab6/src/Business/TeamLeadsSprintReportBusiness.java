@@ -98,7 +98,7 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 
 	public static class TeamLeadsSprintReportDataAdapter {
 		public static TeamLeadsSprintReportData adapt(TeamLeadsSprintReportBusiness businessTeamLeadsSprintReport) {
-			EmployeeData employee = EmployeeData.get(businessTeamLeadsSprintReport.employee.id);
+			EmployeeData employee = EmployeeData.get(businessTeamLeadsSprintReport.employee.getId());
 			TeamLeadsSprintReportData dataTeamLeadsSprintReport = new TeamLeadsSprintReportData(
 					businessTeamLeadsSprintReport.id, employee);
 			return dataTeamLeadsSprintReport;
@@ -108,7 +108,7 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 	public static class TeamLeadsSprintReportPresentationAdapter {
 		public static TeamLeadsSprintReportPresentation adapt(
 				TeamLeadsSprintReportBusiness businessTeamLeadsSprintReport) {
-			EmployeePresentation employee = EmployeePresentation.get(businessTeamLeadsSprintReport.employee.id);
+			EmployeePresentation employee = EmployeePresentation.get(businessTeamLeadsSprintReport.employee.getId());
 			TeamLeadsSprintReportPresentation presentationTeamLeadsSprintReport = new TeamLeadsSprintReportPresentation(
 					businessTeamLeadsSprintReport.id, employee, businessTeamLeadsSprintReport.startDate,
 					businessTeamLeadsSprintReport.endDate);
@@ -119,34 +119,34 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 	public void updateDataReport() {
 		int num = 0;
 		for (int i = 0; i < TeamLeadsSprintReportData.teamLeadsSprintReports.size(); i++) {
-			if (TeamLeadsSprintReportData.teamLeadsSprintReports.get(i).id == id) {
+			if (TeamLeadsSprintReportData.teamLeadsSprintReports.get(i).getId() == id) {
 				num = 0;
 			}
 		}
 		for (int i = 0; i < resolvedTasks.size(); i++) {
 			boolean taskIsAlreadyIn = false;
 			for (int j = 0; j < TeamLeadsSprintReportData.teamLeadsSprintReports.get(num).resolvedTasks.size(); j++) {
-				if (resolvedTasks.get(i).id == TeamLeadsSprintReportData.teamLeadsSprintReports.get(num).resolvedTasks
-						.get(j).id) {
+				if (resolvedTasks.get(i).getID() == TeamLeadsSprintReportData.teamLeadsSprintReports.get(num).resolvedTasks
+						.get(j).getId()) {
 					taskIsAlreadyIn = true;
 				}
 			}
 			if (!taskIsAlreadyIn) {
 				TeamLeadsSprintReportData.teamLeadsSprintReports.get(num).resolvedTasks
-						.add(TaskData.get(resolvedTasks.get(i).id));
+						.add(TaskData.get(resolvedTasks.get(i).getID()));
 			}
 		}
 		for (int i = 0; i < changedTasks.size(); i++) {
 			boolean taskIsAlreadyIn = false;
 			for (int j = 0; j < TeamLeadsSprintReportData.teamLeadsSprintReports.get(num).changedTasks.size(); j++) {
-				if (changedTasks.get(i).id == TeamLeadsSprintReportData.teamLeadsSprintReports.get(num).changedTasks
-						.get(j).id) {
+				if (changedTasks.get(i).getID()== TeamLeadsSprintReportData.teamLeadsSprintReports.get(num).changedTasks
+						.get(j).getId()) {
 					taskIsAlreadyIn = true;
 				}
 			}
 			if (!taskIsAlreadyIn) {
 				TeamLeadsSprintReportData.teamLeadsSprintReports.get(num).changedTasks
-						.add(TaskData.get(changedTasks.get(i).id));
+						.add(TaskData.get(changedTasks.get(i).getID()));
 			}
 		}
 	}
@@ -154,7 +154,7 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 	public void updateTeamLeadsPresentationReport() {
 		int num = 0;
 		for (int i = 0; i < TeamLeadsSprintReportPresentation.teamLeadsSprintReports.size(); i++) {
-			if (TeamLeadsSprintReportPresentation.teamLeadsSprintReports.get(i).id == id) {
+			if (TeamLeadsSprintReportPresentation.teamLeadsSprintReports.get(i).getId() == id) {
 				num = i;
 			}
 		}
@@ -163,14 +163,14 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 			for (int j = 0; j < TeamLeadsSprintReportPresentation.teamLeadsSprintReports.get(num).resolvedTasks
 					.size(); j++) {
 				if (resolvedTasks
-						.get(i).id == TeamLeadsSprintReportPresentation.teamLeadsSprintReports.get(num).resolvedTasks
-								.get(j).id) {
+						.get(i).getID() == TeamLeadsSprintReportPresentation.teamLeadsSprintReports.get(num).resolvedTasks
+								.get(j).getId()) {
 					taskIsAlreadyIn = true;
 				}
 			}
 			if (!taskIsAlreadyIn) {
 				TeamLeadsSprintReportPresentation.teamLeadsSprintReports.get(num).resolvedTasks
-						.add(TaskPresentation.get(resolvedTasks.get(i).id));
+						.add(TaskPresentation.get(resolvedTasks.get(i).getID()));
 			}
 		}
 		for (int i = 0; i < changedTasks.size(); i++) {
@@ -178,14 +178,14 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 			for (int j = 0; j < TeamLeadsSprintReportPresentation.teamLeadsSprintReports.get(num).changedTasks
 					.size(); j++) {
 				if (changedTasks
-						.get(i).id == TeamLeadsSprintReportPresentation.teamLeadsSprintReports.get(num).changedTasks
-								.get(j).task.id) {
+						.get(i).getID()== TeamLeadsSprintReportPresentation.teamLeadsSprintReports.get(num).changedTasks
+								.get(j).task.getId()) {
 					taskIsAlreadyIn = true;
 				}
 			}
 			if (!taskIsAlreadyIn) {
 				ChangedTaskPresentation task = new ChangedTaskPresentation(
-						TaskPresentation.get(changedTasks.get(i).id));
+						TaskPresentation.get(changedTasks.get(i).getID()));
 				ArrayList<TaskChangeBusiness> changes = changedTasks.get(i).getWhatsChangedInASprit(startDate, endDate);
 				for (int k = 0; k < changes.size(); k++) {
 					task.changes.add(TaskChangeBusiness.TaskChangePresentationAdapter.adapt(changes.get(k)));

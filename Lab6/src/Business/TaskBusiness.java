@@ -10,10 +10,8 @@ import Presentation.EmployeePresentation;
 import Presentation.TaskPresentation;
 
 public class TaskBusiness {
-	// public static ArrayList<TaskBusiness> tasks = new
-	// ArrayList<TaskBusiness>();
 	private static int ID = 1;
-	int id;
+	private int id;
 	public String title;
 	public String description;
 	public EmployeeBusiness employee;
@@ -67,7 +65,7 @@ public class TaskBusiness {
 		journal.add(new TaskChangeAssignBusiness(doer, time, this.employee, employee));
 		this.employee = employee;
 		lastChangeTime = time.getDate();
-		TaskData.assignEmployee(this.id, employee.id);
+		TaskData.assignEmployee(this.id, employee.getId());
 	}
 
 	public void changeState(EmployeeBusiness doer) {
@@ -137,9 +135,9 @@ public class TaskBusiness {
 			}
 		}
 		for (int i = 0; i < TaskPresentation.tasks.size(); i++) {
-			if (TaskPresentation.tasks.get(i).id == id) {
-				if (businessTask.employee.id != TaskPresentation.tasks.get(i).employee.id) {
-					TaskPresentation.tasks.get(i).employee = EmployeePresentation.get(businessTask.employee.id);
+			if (TaskPresentation.tasks.get(i).getId() == id) {
+				if (businessTask.employee.getId() != TaskPresentation.tasks.get(i).employee.getId()) {
+					TaskPresentation.tasks.get(i).employee = EmployeePresentation.get(businessTask.employee.getId());
 				}
 				if (!businessTask.state.toString().equals(TaskPresentation.tasks.get(i).state)) {
 					TaskPresentation.tasks.get(i).state = businessTask.state.toString();
@@ -164,7 +162,7 @@ public class TaskBusiness {
 			}
 		}
 		for (int i = 0; i < TaskPresentation.tasks.size(); i++) {
-			if (TaskPresentation.tasks.get(i).id == id) {
+			if (TaskPresentation.tasks.get(i).getId() == id) {
 				if (TaskPresentation.tasks.get(i).journal.size() != businessTask.journal.size()) {
 					for (int j = TaskPresentation.tasks.get(i).journal.size(); j < businessTask.journal.size(); j++) {
 						TaskPresentation.tasks.get(i).journal.add(
@@ -177,7 +175,7 @@ public class TaskBusiness {
 
 	public static class TaskDataAdapter {
 		public static TaskData adapt(TaskBusiness businessTask) {
-			EmployeeData employee = EmployeeData.get(businessTask.employee.id);
+			EmployeeData employee = EmployeeData.get(businessTask.employee.getId());
 			TaskData dataTask = new TaskData(businessTask.title, businessTask.description, businessTask.id, employee);
 			return dataTask;
 		}
@@ -185,7 +183,7 @@ public class TaskBusiness {
 
 	public static class TaskPresentationAdapter {
 		public static TaskPresentation adapt(TaskBusiness businessTask) {
-			EmployeePresentation employee = EmployeePresentation.get(businessTask.employee.id);
+			EmployeePresentation employee = EmployeePresentation.get(businessTask.employee.getId());
 			TaskPresentation presentationTask = new TaskPresentation(businessTask.id, businessTask.title,
 					businessTask.description, employee, businessTask.creationTime);
 			return presentationTask;

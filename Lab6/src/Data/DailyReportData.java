@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class DailyReportData {
 	public static ArrayList<DailyReportData> dailyReports = new ArrayList<DailyReportData>();
-	public int id;
+	private int id;
 	public ArrayList<TaskData> resolvedTasks;
 	public ArrayList<TaskData> changedTasks;
 	public EmployeeData employee;
@@ -24,6 +24,9 @@ public class DailyReportData {
 	public void addChangedTask(TaskData task) {
 		changedTasks.add(task);
 	}
-	
+
+	public int getId() {
+		return id;
+	}
 
 }

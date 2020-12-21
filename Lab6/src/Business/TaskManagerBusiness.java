@@ -18,7 +18,7 @@ public class TaskManagerBusiness {
 
 	public static void changeTaskState(int id, EmployeeBusiness doer) {
 		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.get(i).id == id) {
+			if (tasks.get(i).getID() == id) {
 				tasks.get(i).changeState(doer);
 			}
 		}
@@ -26,7 +26,7 @@ public class TaskManagerBusiness {
 
 	public static void taskAddCommentary(int id, EmployeeBusiness doer, String comment) {
 		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.get(i).id == id) {
+			if (tasks.get(i).getID() == id) {
 				tasks.get(i).addCommentary(comment, doer);
 			}
 		}
@@ -34,7 +34,7 @@ public class TaskManagerBusiness {
 
 	public static void taskAssignEmployee(int id, EmployeeBusiness doer, EmployeeBusiness employee) {
 		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.get(i).id == id) {
+			if (tasks.get(i).getID() == id) {
 				tasks.get(i).assignEmployee(employee, doer);
 			}
 		}
@@ -43,7 +43,7 @@ public class TaskManagerBusiness {
 
 	public static TaskBusiness get(int id) {
 		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.get(i).id == id) {
+			if (tasks.get(i).getID() == id) {
 				return tasks.get(i);
 			}
 		}

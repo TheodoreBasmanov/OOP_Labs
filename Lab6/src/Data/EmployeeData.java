@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class EmployeeData {
 	static ArrayList<EmployeeData> employees = new ArrayList<EmployeeData>();
-	public int id;
+	private int id;
 	public String name;
 	public boolean isTeamLead;
 
@@ -13,10 +13,15 @@ public class EmployeeData {
 		this.name = name;
 		EmployeeData.employees.add(this);
 	}
-	public static EmployeeData get(int id){
+
+	public int getId() {
+		return id;
+	}
+
+	public static EmployeeData get(int id) {
 		for (int i = 0; i < employees.size(); i++) {
 			if (employees.get(i).id == id) {
-				return( employees.get(i));
+				return (employees.get(i));
 			}
 		}
 		return null;
@@ -28,19 +33,6 @@ public class EmployeeData {
 				employees.get(i).isTeamLead = true;
 			}
 		}
-	}
-	
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == this) {
-			return true;
-		}
-		if (!(o instanceof EmployeeData)) {
-			return false;
-		}
-		EmployeeData c = (EmployeeData) o;
-		return id == c.id;
 	}
 
 }

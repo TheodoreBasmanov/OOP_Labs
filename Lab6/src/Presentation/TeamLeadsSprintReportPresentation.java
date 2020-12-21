@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class TeamLeadsSprintReportPresentation {
 	public static ArrayList<TeamLeadsSprintReportPresentation> teamLeadsSprintReports = new ArrayList<TeamLeadsSprintReportPresentation>();
-	public int id;
+	private int id;
 	public ArrayList<TaskPresentation> resolvedTasks;
 	public ArrayList<ChangedTaskPresentation> changedTasks;
 	public LocalDate startDate;
@@ -22,6 +22,11 @@ public class TeamLeadsSprintReportPresentation {
 		changedTasks = new ArrayList<ChangedTaskPresentation>();
 		teamLeadsSprintReports.add(this);
 	}
+	
+	public int getId() {
+		return id;
+	}
+
 
 	String show() {
 		StringBuilder sb = new StringBuilder();

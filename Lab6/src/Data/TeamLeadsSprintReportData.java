@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class TeamLeadsSprintReportData {
 	public static ArrayList<TeamLeadsSprintReportData> teamLeadsSprintReports = new ArrayList<TeamLeadsSprintReportData>();
-	public int id;
+	private int id;
 	public ArrayList<TaskData> resolvedTasks;
 	public ArrayList<TaskData> changedTasks;
 	public EmployeeData employee;
@@ -23,6 +23,10 @@ public class TeamLeadsSprintReportData {
 
 	public void addChangedTask(TaskData task) {
 		changedTasks.add(task);
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

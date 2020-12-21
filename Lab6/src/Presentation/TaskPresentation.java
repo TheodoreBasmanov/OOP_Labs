@@ -8,7 +8,7 @@ import Business.TaskBusiness.State;
 
 public class TaskPresentation {
 	public static ArrayList<TaskPresentation> tasks = new ArrayList<TaskPresentation>();
-	public int id;
+	private int id;
 	public String title;
 	public String description;
 	public EmployeePresentation employee;
@@ -29,6 +29,11 @@ public class TaskPresentation {
 		lastChangeTime = creationTime;
 		tasks.add(this);
 	}
+	
+	public int getId() {
+		return id;
+	}
+
 
 	String show() {
 		TaskBusiness.updatePresentationTask(this.id);

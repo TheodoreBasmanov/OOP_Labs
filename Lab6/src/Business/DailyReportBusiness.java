@@ -50,15 +50,9 @@ public class DailyReportBusiness extends ReportBusiness {
 	@Override
 	void addResolvedTask(TaskBusiness task)
 			throws ExceptionsBusiness.NotYourTask, ExceptionsBusiness.NotResolvedTask, ExceptionsBusiness.NotToday {
-		if (!task.employee.equals(employee)) {
-			throw new ExceptionsBusiness.NotYourTask();
-		}
+		checkTaskDay(date, task);
 		if (!task.isResolved()) {
 			throw new ExceptionsBusiness.NotResolvedTask();
-		}
-		if (!(task.getLastStateChange().changeTime.isBefore(date.atStartOfDay())
-				&& task.getLastStateChange().changeTime.isAfter(date.plusDays(1).atStartOfDay()))) {
-			throw new ExceptionsBusiness.NotToday();
 		}
 		resolvedTasks.add(task);
 		updateDataReport();
@@ -67,13 +61,7 @@ public class DailyReportBusiness extends ReportBusiness {
 
 	@Override
 	void addChangedTask(TaskBusiness task) throws ExceptionsBusiness.NotYourTask, ExceptionsBusiness.NotToday {
-		if (!task.employee.equals(employee)) {
-			throw new ExceptionsBusiness.NotYourTask();
-		}
-		if (!(task.lastChangeTime.isBefore(date.atStartOfDay())
-				&& task.lastChangeTime.isAfter(date.plusDays(1).atStartOfDay()))) {
-			throw new ExceptionsBusiness.NotToday();
-		}
+		checkTaskDay(date, task);
 		changedTasks.add(task);
 		updateDataReport();
 		updatePresentationReport();
@@ -85,7 +73,7 @@ public class DailyReportBusiness extends ReportBusiness {
 
 	public static class DailyReportDataAdapter {
 		public static DailyReportData adapt(DailyReportBusiness businessDailyReport) {
-			EmployeeData employee = EmployeeData.get(businessDailyReport.employee.id);
+			EmployeeData employee = EmployeeData.get(businessDailyReport.employee.getId());
 			DailyReportData dataDailyReport = new DailyReportData(businessDailyReport.id, employee);
 			return dataDailyReport;
 		}
@@ -93,7 +81,7 @@ public class DailyReportBusiness extends ReportBusiness {
 
 	public static class DailyReportPresentationAdapter {
 		public static DailyReportPresentation adapt(DailyReportBusiness businessDailyReport) {
-			EmployeePresentation employee = EmployeePresentation.get(businessDailyReport.employee.id);
+			EmployeePresentation employee = EmployeePresentation.get(businessDailyReport.employee.getId());
 			DailyReportPresentation presentationDailyReport = new DailyReportPresentation(businessDailyReport.id,
 					employee, businessDailyReport.date);
 			return presentationDailyReport;
@@ -103,30 +91,30 @@ public class DailyReportBusiness extends ReportBusiness {
 	public void updateDataReport() {
 		int num = 0;
 		for (int i = 0; i < DailyReportData.dailyReports.size(); i++) {
-			if (DailyReportData.dailyReports.get(i).id == id) {
+			if (DailyReportData.dailyReports.get(i).getId() == id) {
 				num = i;
 			}
 		}
 		for (int i = 0; i < resolvedTasks.size(); i++) {
 			boolean taskIsAlreadyIn = false;
 			for (int j = 0; j < DailyReportData.dailyReports.get(num).resolvedTasks.size(); j++) {
-				if (resolvedTasks.get(i).id == DailyReportData.dailyReports.get(num).resolvedTasks.get(j).id) {
+				if (resolvedTasks.get(i).getID() == DailyReportData.dailyReports.get(num).resolvedTasks.get(j).getId()) {
 					taskIsAlreadyIn = true;
 				}
 			}
 			if (!taskIsAlreadyIn) {
-				DailyReportData.dailyReports.get(num).resolvedTasks.add(TaskData.get(resolvedTasks.get(i).id));
+				DailyReportData.dailyReports.get(num).resolvedTasks.add(TaskData.get(resolvedTasks.get(i).getID()));
 			}
 		}
 		for (int i = 0; i < changedTasks.size(); i++) {
 			boolean taskIsAlreadyIn = false;
 			for (int j = 0; j < DailyReportData.dailyReports.get(num).changedTasks.size(); j++) {
-				if (changedTasks.get(i).id == DailyReportData.dailyReports.get(num).changedTasks.get(j).id) {
+				if (changedTasks.get(i).getID() == DailyReportData.dailyReports.get(num).changedTasks.get(j).getId()) {
 					taskIsAlreadyIn = true;
 				}
 			}
 			if (!taskIsAlreadyIn) {
-				DailyReportData.dailyReports.get(num).changedTasks.add(TaskData.get(changedTasks.get(i).id));
+				DailyReportData.dailyReports.get(num).changedTasks.add(TaskData.get(changedTasks.get(i).getID()));
 			}
 		}
 	}
@@ -134,7 +122,7 @@ public class DailyReportBusiness extends ReportBusiness {
 	public void updatePresentationReport() {
 		int num = 0;
 		for (int i = 0; i < DailyReportPresentation.dailyReports.size(); i++) {
-			if (DailyReportPresentation.dailyReports.get(i).id == id) {
+			if (DailyReportPresentation.dailyReports.get(i).getId() == id) {
 				num = i;
 			}
 		}
@@ -142,26 +130,26 @@ public class DailyReportBusiness extends ReportBusiness {
 			boolean taskIsAlreadyIn = false;
 			for (int j = 0; j < DailyReportPresentation.dailyReports.get(num).resolvedTasks.size(); j++) {
 				
-				if (resolvedTasks.get(i).id == DailyReportPresentation.dailyReports.get(num).resolvedTasks.get(j).id) {
+				if (resolvedTasks.get(i).getID() == DailyReportPresentation.dailyReports.get(num).resolvedTasks.get(j).getId()) {
 					taskIsAlreadyIn = true;
 				}
 			}
 			if (!taskIsAlreadyIn) {
 				DailyReportPresentation.dailyReports.get(num).resolvedTasks
-						.add(TaskPresentation.get(resolvedTasks.get(i).id));
+						.add(TaskPresentation.get(resolvedTasks.get(i).getID()));
 			}
 		}
 		for (int i = 0; i < changedTasks.size(); i++) {
 			boolean taskIsAlreadyIn = false;
 			for (int j = 0; j < DailyReportPresentation.dailyReports.get(num).changedTasks.size(); j++) {
 				if (changedTasks
-						.get(i).id == DailyReportPresentation.dailyReports.get(num).changedTasks.get(j).task.id) {
+						.get(i).getID() == DailyReportPresentation.dailyReports.get(num).changedTasks.get(j).task.getId()) {
 					taskIsAlreadyIn = true;
 				}
 			}
 			if (!taskIsAlreadyIn) {
 				ChangedTaskPresentation task = new ChangedTaskPresentation(
-						TaskPresentation.get(changedTasks.get(i).id));
+						TaskPresentation.get(changedTasks.get(i).getID()));
 				ArrayList<TaskChangeBusiness> changes = changedTasks.get(i).getWhatsChangedInADay(date);
 				for (int k = 0; k < changes.size(); k++) {
 					task.changes.add(TaskChangeBusiness.TaskChangePresentationAdapter.adapt(changes.get(k)));

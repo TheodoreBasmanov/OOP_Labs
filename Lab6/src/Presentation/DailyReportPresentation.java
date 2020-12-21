@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class DailyReportPresentation {
 	public static ArrayList<DailyReportPresentation> dailyReports = new ArrayList<DailyReportPresentation>();
-	public int id;
+	private int id;
 	public ArrayList<TaskPresentation> resolvedTasks;
 	public ArrayList<ChangedTaskPresentation> changedTasks;
 	public EmployeePresentation employee;
@@ -18,6 +18,10 @@ public class DailyReportPresentation {
 		dailyReports.add(this);
 		resolvedTasks = new ArrayList<TaskPresentation>();
 		changedTasks = new ArrayList<ChangedTaskPresentation>();
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	String show() {

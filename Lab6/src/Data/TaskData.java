@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class TaskData {
 	public static ArrayList<TaskData> tasks = new ArrayList<TaskData>();
-	public int id;
+	private int id;
 	public String title;
 	public String description;
 	public EmployeeData employee;
@@ -15,6 +15,9 @@ public class TaskData {
 		this.id = id;
 		this.employee = employee;
 		tasks.add(this);
+	}
+	public int getId(){
+		return id;
 	}
 
 	public static void assignEmployee(int taskId, int employeeId) {
