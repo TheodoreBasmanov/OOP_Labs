@@ -18,6 +18,8 @@ public class TeamLeadsSprintReportPresentation {
 		this.teamLead = employee;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		resolvedTasks = new ArrayList<TaskPresentation>();
+		changedTasks = new ArrayList<ChangedTaskPresentation>();
 		teamLeadsSprintReports.add(this);
 	}
 
@@ -26,6 +28,7 @@ public class TeamLeadsSprintReportPresentation {
 		sb.append("Start of the sprint: " + startDate + ". End of the sprint: " + endDate);
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Teadm Lead - " + teamLead.name);
+		sb.append(System.getProperty("line.separator"));
 		sb.append("Resolved tasks:");
 		sb.append(System.getProperty("line.separator"));
 		for (int i = 0; i < resolvedTasks.size(); i++) {
@@ -37,5 +40,14 @@ public class TeamLeadsSprintReportPresentation {
 			sb.append(changedTasks.get(i).show());
 		}
 		return sb.toString();
+	}
+
+	public static TeamLeadsSprintReportPresentation get(int id) {
+		for (int i = 0; i < teamLeadsSprintReports.size(); i++) {
+			if (teamLeadsSprintReports.get(i).id == id) {
+				return teamLeadsSprintReports.get(i);
+			}
+		}
+		return null;
 	}
 }

@@ -16,10 +16,11 @@ public class ChangedTaskPresentation {
 		sb.append(task.show());
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Changes made: ");
-		sb.append(System.getProperty("line.separator"));
+		
 		for (int i = 0; i < changes.size(); i++) {
 			sb.append(changes.get(i).show());
 		}
+		sb.append(System.getProperty("line.separator"));
 		return sb.toString();
 	}
 }

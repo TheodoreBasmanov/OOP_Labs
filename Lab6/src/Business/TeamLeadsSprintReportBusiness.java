@@ -19,21 +19,23 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 		super(EmployeeBusiness.getTeamLead(), time);
 	}
 
-	TeamLeadsSprintReportBusiness(EmployeeBusiness employee, TimeGiver time, LocalDate startDate, LocalDate endDate) {
+	public TeamLeadsSprintReportBusiness(EmployeeBusiness employee, TimeGiver time, LocalDate startDate, LocalDate endDate) {
 		super(EmployeeBusiness.getTeamLead(), time);
 		this.startDate = startDate;
 		this.endDate = endDate;
 		TeamLeadsSprintReportDataAdapter.adapt(this);
+		TeamLeadsSprintReportPresentationAdapter.adapt(this);
 	}
 
 	@Override
+	public
 	void createReport() {
 		resolvedTasks = new ArrayList<TaskBusiness>();
 		changedTasks = new ArrayList<TaskBusiness>();
 		for (int i = 0; i < SprintReportBusiness.employeesReportsForSprint.size(); i++) {
 			resolvedTasks.addAll(SprintReportBusiness.employeesReportsForSprint.get(i).resolvedTasks);
 		}
-		for (int i = SprintReportBusiness.employeesReportsForSprint.size() - 1; i >= 0; i++) {
+		for (int i = SprintReportBusiness.employeesReportsForSprint.size() - 1; i >= 0; i--) {
 			for (int j = 0; j < SprintReportBusiness.employeesReportsForSprint.get(i).changedTasks.size(); j++) {
 				if (!TaskBusiness.taskIsOnTheList(changedTasks,
 						SprintReportBusiness.employeesReportsForSprint.get(i).changedTasks.get(j))) {
@@ -42,6 +44,7 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 			}
 		}
 		updateDataReport();
+		updateTeamLeadsPresentationReport();
 	}
 
 	@Override
@@ -60,6 +63,7 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 			}
 		}
 		updateDataReport();
+		updateTeamLeadsPresentationReport();
 	}
 
 	@Override
@@ -74,6 +78,7 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 		}
 		resolvedTasks.add(task);
 		updateDataReport();
+		updateTeamLeadsPresentationReport();
 	}
 
 	@Override
@@ -84,6 +89,7 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 		}
 		changedTasks.add(task);
 		updateDataReport();
+		updateTeamLeadsPresentationReport();
 	}
 
 	static void clearEmployeesReports() {
@@ -182,7 +188,7 @@ public class TeamLeadsSprintReportBusiness extends ReportBusiness {
 						TaskPresentation.get(changedTasks.get(i).id));
 				ArrayList<TaskChangeBusiness> changes = changedTasks.get(i).getWhatsChangedInASprit(startDate, endDate);
 				for (int k = 0; k < changes.size(); k++) {
-					task.changes.add(TaskChangeBusiness.TaskChangePresentationAdapter.adapt(changes.get(i)));
+					task.changes.add(TaskChangeBusiness.TaskChangePresentationAdapter.adapt(changes.get(k)));
 				}
 				TeamLeadsSprintReportPresentation.teamLeadsSprintReports.get(num).changedTasks.add(task);
 			}

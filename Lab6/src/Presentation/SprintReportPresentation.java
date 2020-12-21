@@ -17,6 +17,8 @@ public class SprintReportPresentation {
 		this.employee = employee;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		resolvedTasks = new ArrayList<TaskPresentation>();
+		changedTasks = new ArrayList<ChangedTaskPresentation>();
 		sprintReports.add(this);
 	}
 
@@ -25,6 +27,7 @@ public class SprintReportPresentation {
 		sb.append("Start of the sprint: " + startDate + ". End of the sprint: " + endDate);
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Employee, who reports - " + employee.name);
+		sb.append(System.getProperty("line.separator"));
 		sb.append("Resolved tasks:");
 		sb.append(System.getProperty("line.separator"));
 		for (int i = 0; i < resolvedTasks.size(); i++) {
@@ -36,5 +39,14 @@ public class SprintReportPresentation {
 			sb.append(changedTasks.get(i).show());
 		}
 		return sb.toString();
+	}
+
+	public static SprintReportPresentation get(int id) {
+		for (int i = 0; i < sprintReports.size(); i++) {
+			if (sprintReports.get(i).id == id) {
+				return sprintReports.get(i);
+			}
+		}
+		return null;
 	}
 }

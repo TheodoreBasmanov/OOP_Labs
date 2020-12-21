@@ -10,10 +10,11 @@ import org.junit.Test;
 
 import Business.DailyReportBusiness;
 import Business.EmployeeBusiness;
+import Business.SprintReportBusiness;
 import Business.TaskBusiness;
 import Business.TestTime;
 
-public class DailyReportPresentationTest {
+public class SprintReportPresentationTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -41,8 +42,22 @@ public class DailyReportPresentationTest {
 		time.setDate(LocalDateTime.of(2020, 12, 21, 00, 00));
 		DailyReportBusiness report = new DailyReportBusiness(employee, time);
 		report.createReport();
-		DailyReportPresentation reportPres = DailyReportPresentation.get(report.id);
-		System.out.println(reportPres.show());
+		time.setDate(LocalDateTime.of(2020, 12, 22, 9, 00));
+		TaskBusiness task2 = new TaskBusiness("Task2", "Some description next day", employee, time, employee);
+		task2.addCommentary("Some commentary next day", employee);
+		task2.changeState(employee);
+		task2.addCommentary("Some other commentary next day", employee);
+		task2.changeState(employee);
+		TaskBusiness task3 = new TaskBusiness("Task3", "Some other description next day", employee, time, employee);
+		task3.addCommentary("Some commentary to other task next day", employee);
+		task3.changeState(employee);
+		time.setDate(LocalDateTime.of(2020, 12, 22, 00, 00));
+		DailyReportBusiness report1 = new DailyReportBusiness(employee, time);
+		report1.createReport();
+		SprintReportBusiness sprReport = new SprintReportBusiness(employee, time, LocalDateTime.of(2020, 12, 20, 00, 00).toLocalDate(), LocalDateTime.of(2020, 12, 25, 00, 00).toLocalDate());
+		sprReport.createReport();
+		SprintReportPresentation sprReportPresent = SprintReportPresentation.get(sprReport.id);
+		System.out.println(sprReportPresent.show());
 	}
 
 }
