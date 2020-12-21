@@ -10,7 +10,8 @@ import Presentation.EmployeePresentation;
 import Presentation.TaskPresentation;
 
 public class TaskBusiness {
-	public static ArrayList<TaskBusiness> tasks = new ArrayList<TaskBusiness>();
+	// public static ArrayList<TaskBusiness> tasks = new
+	// ArrayList<TaskBusiness>();
 	private static int ID = 1;
 	public int id;
 	public String title;
@@ -35,7 +36,8 @@ public class TaskBusiness {
 		}
 	}
 
-	TaskBusiness(String title, String description, EmployeeBusiness employee, TimeGiver time, EmployeeBusiness doer) {
+	public TaskBusiness(String title, String description, EmployeeBusiness employee, TimeGiver time,
+			EmployeeBusiness doer) {
 		id = ID;
 		ID++;
 		this.title = title;
@@ -51,20 +53,20 @@ public class TaskBusiness {
 		TaskPresentationAdapter.adapt(this);
 	}
 
-	void addCommentary(String comment, EmployeeBusiness doer) {
+	public void addCommentary(String comment, EmployeeBusiness doer) {
 		commentaries.add(comment);
 		lastChangeTime = time.getDate();
 		journal.add(new TaskChangeCommentBusiness(doer, time, comment));
 	}
 
-	void assignEmployee(EmployeeBusiness employee, EmployeeBusiness doer) {
+	public void assignEmployee(EmployeeBusiness employee, EmployeeBusiness doer) {
 		journal.add(new TaskChangeAssignBusiness(doer, time, this.employee, employee));
 		this.employee = employee;
 		lastChangeTime = time.getDate();
 		TaskData.assignEmployee(this.id, employee.id);
 	}
 
-	void changeState(EmployeeBusiness doer) {
+	public void changeState(EmployeeBusiness doer) {
 		journal.add(new TaskChangeStateBusiness(doer, time, this.state, this.state.next()));
 		this.state = this.state.next();
 	}
@@ -124,9 +126,9 @@ public class TaskBusiness {
 
 	public static void updatePresentationTask(int id) {
 		TaskBusiness businessTask = null;
-		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.get(i).id == id) {
-				businessTask = tasks.get(i);
+		for (int i = 0; i < TaskManagerBusiness.tasks.size(); i++) {
+			if (TaskManagerBusiness.tasks.get(i).id == id) {
+				businessTask = TaskManagerBusiness.tasks.get(i);
 				break;
 			}
 		}
@@ -134,6 +136,9 @@ public class TaskBusiness {
 			if (TaskPresentation.tasks.get(i).id == id) {
 				if (businessTask.employee.id != TaskPresentation.tasks.get(i).employee.id) {
 					TaskPresentation.tasks.get(i).employee = EmployeePresentation.get(businessTask.employee.id);
+				}
+				if (!businessTask.state.toString().equals(TaskPresentation.tasks.get(i).state)) {
+					TaskPresentation.tasks.get(i).state = businessTask.state.toString();
 				}
 				TaskPresentation.tasks.get(i).lastChangeTime = businessTask.lastChangeTime;
 				if (businessTask.commentaries.size() != TaskPresentation.tasks.get(i).commentaries.size()) {
@@ -148,9 +153,9 @@ public class TaskBusiness {
 
 	public static void updatePresentationTaskJournal(int id) {
 		TaskBusiness businessTask = null;
-		for (int i = 0; i < tasks.size(); i++) {
-			if (tasks.get(i).id == id) {
-				businessTask = tasks.get(i);
+		for (int i = 0; i < TaskManagerBusiness.tasks.size(); i++) {
+			if (TaskManagerBusiness.tasks.get(i).id == id) {
+				businessTask = TaskManagerBusiness.tasks.get(i);
 				break;
 			}
 		}

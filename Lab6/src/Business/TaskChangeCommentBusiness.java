@@ -19,7 +19,7 @@ public class TaskChangeCommentBusiness extends TaskChangeBusiness {
 	@Override
 	public ArrayList<String> giveInfo() {
 		ArrayList<String> info = new ArrayList<String>();
-		info.add("Added commentary:" + comment);
+		info.add("Added commentary: " + comment);
 		return info;
 	}
 

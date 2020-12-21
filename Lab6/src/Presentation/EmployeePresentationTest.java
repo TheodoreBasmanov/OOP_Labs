@@ -22,6 +22,7 @@ public class EmployeePresentationTest {
 	public void testTeamLead() {
 		EmployeeBusiness.teamLeadExists = false;
 		EmployeeBusiness.employees.clear();
+		EmployeePresentation.employees.clear();
 		EmployeeBusiness teamLead = new EmployeeBusiness("John Smith");
 		teamLead.makeTeamLead();
 		EmployeeBusiness lead1 = new EmployeeBusiness("Mary Gray");

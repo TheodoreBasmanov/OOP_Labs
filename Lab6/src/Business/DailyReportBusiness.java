@@ -13,10 +13,10 @@ import Presentation.TaskPresentation;
 
 public class DailyReportBusiness extends ReportBusiness {
 	static int ID = 1;
-	static ArrayList<DailyReportBusiness> reportsForSprint;
+	static ArrayList<DailyReportBusiness> reportsForSprint = new ArrayList<DailyReportBusiness>();
 	LocalDate date;
 
-	DailyReportBusiness(EmployeeBusiness employee, TimeGiver time) {
+	public DailyReportBusiness(EmployeeBusiness employee, TimeGiver time) {
 		super(employee, time);
 		id = ID;
 		ID++;
@@ -27,6 +27,7 @@ public class DailyReportBusiness extends ReportBusiness {
 	}
 
 	@Override
+	public
 	void createReport() {
 		resolvedTasks = new ArrayList<TaskBusiness>();
 		changedTasks = new ArrayList<TaskBusiness>();
@@ -140,6 +141,7 @@ public class DailyReportBusiness extends ReportBusiness {
 		for (int i = 0; i < resolvedTasks.size(); i++) {
 			boolean taskIsAlreadyIn = false;
 			for (int j = 0; j < DailyReportPresentation.dailyReports.get(num).resolvedTasks.size(); j++) {
+				
 				if (resolvedTasks.get(i).id == DailyReportPresentation.dailyReports.get(num).resolvedTasks.get(j).id) {
 					taskIsAlreadyIn = true;
 				}
@@ -162,7 +164,7 @@ public class DailyReportBusiness extends ReportBusiness {
 						TaskPresentation.get(changedTasks.get(i).id));
 				ArrayList<TaskChangeBusiness> changes = changedTasks.get(i).getWhatsChangedInADay(date);
 				for (int k = 0; k < changes.size(); k++) {
-					task.changes.add(TaskChangeBusiness.TaskChangePresentationAdapter.adapt(changes.get(i)));
+					task.changes.add(TaskChangeBusiness.TaskChangePresentationAdapter.adapt(changes.get(k)));
 				}
 				DailyReportPresentation.dailyReports.get(num).changedTasks.add(task);
 			}

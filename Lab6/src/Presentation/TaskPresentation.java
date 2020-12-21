@@ -43,6 +43,8 @@ public class TaskPresentation {
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Task creation time: " + creationTime);
 		sb.append(System.getProperty("line.separator"));
+		sb.append("Commentaries: ");
+		sb.append(System.getProperty("line.separator"));
 		for (int i = 0; i < commentaries.size(); i++) {
 			sb.append(commentaries.get(i));
 			sb.append(System.getProperty("line.separator"));
@@ -53,7 +55,11 @@ public class TaskPresentation {
 	String showJournal() {
 		TaskBusiness.updatePresentationTaskJournal(this.id);
 		StringBuilder sb = new StringBuilder();
+		sb.append("Journal: ");
+		sb.append(System.getProperty("line.separator"));
 		for (int i = 0; i < journal.size(); i++) {
+			sb.append("Change number "+(i+1));
+			sb.append(System.getProperty("line.separator"));
 			sb.append(journal.get(i).show());
 		}
 		return sb.toString();

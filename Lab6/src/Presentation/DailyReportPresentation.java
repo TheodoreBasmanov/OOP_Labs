@@ -16,6 +16,8 @@ public class DailyReportPresentation {
 		this.employee = employee;
 		this.date = date;
 		dailyReports.add(this);
+		resolvedTasks = new ArrayList<TaskPresentation>();
+		changedTasks = new ArrayList<ChangedTaskPresentation>();
 	}
 
 	String show() {
@@ -23,6 +25,7 @@ public class DailyReportPresentation {
 		sb.append("Date of the report: " + date);
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Employee, who reports - " + employee.name);
+		sb.append(System.getProperty("line.separator"));
 		sb.append("Resolved tasks:");
 		sb.append(System.getProperty("line.separator"));
 		for (int i = 0; i < resolvedTasks.size(); i++) {
@@ -34,5 +37,14 @@ public class DailyReportPresentation {
 			sb.append(changedTasks.get(i).show());
 		}
 		return sb.toString();
+	}
+
+	public static DailyReportPresentation get(int id) {
+		for (int i = 0; i < dailyReports.size(); i++) {
+			if (dailyReports.get(i).id == id) {
+				return dailyReports.get(i);
+			}
+		}
+		return null;
 	}
 }

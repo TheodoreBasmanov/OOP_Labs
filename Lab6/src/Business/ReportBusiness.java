@@ -3,7 +3,7 @@ package Business;
 import java.util.ArrayList;
 
 public abstract class ReportBusiness {
-	int id;
+	public int id;
 	TimeGiver time;
 	ArrayList<TaskBusiness> resolvedTasks;
 	ArrayList<TaskBusiness> changedTasks;
